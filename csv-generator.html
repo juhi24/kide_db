@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>CSV Generator</title>
+
+  
+</head><body>
+CSV-generator<br>
+
+<br>
+
+<form method="post" action="csvgen.php" name="csv-generator"><br>
+Campaign: 
+  <select name="campaign">
+
+  
+  </select>
+
+  <br>
+Timeframe: <input size="8" maxlength="8" name="date" value="YYYYMMDD"> <input size="6" maxlength="6" name="time" value="hhmmss">.<input maxlength="3" size="3" name="millisec" value="mmm"><br>
+  <br>
+Time resolution: 
+  <select name="resolution">
+  <option selected="selected">1</option>
+  <option>2</option>
+  <option>3</option>
+  <option>5</option>
+  <option>10</option>
+  <option>15</option>
+  <option>20</option>
+  <option>30</option>
+  </select>
+  <select name="timeunit">
+  <option selected="selected">seconds</option>
+  <option>minutes</option>
+  </select>
+  <br>
+  <br>
+  <input checked="checked" name="quality" type="checkbox"> Quality only<br>
+<br>
+  <input name="Submit" type="submit"> <input name="Reset" type="reset"><br>
+</form>
+
+</body></html>
