@@ -4,6 +4,8 @@ CREATE TYPE nwnn AS ENUM ('B', 'P', 'C', 'I', 'PA', 'CA', 'R', 'RA', 'ucl');
 
 CREATE TYPE bayesian AS ENUM ('B', 'P', 'C', 'I', 'PA', 'CA', 'R', 'RA', 'NaN');
 
+CREATE TYPE saitti AS ENUM ('AAF', 'AMF', 'NSA', 'SGP', 'TWP', 'other');
+
 CREATE TABLE user (
     username varchar PRIMARY KEY,
     password varchar
@@ -25,16 +27,15 @@ CREATE TABLE kide (
     CHECK (ar_noholes > 0 AND ar_noholes < 1),
     asprat real NOT NULL,
     n_corners integer NOT NULL,
-    site varchar(5) NOT NULL,
-    quality boolean
+    site saitti
 );
 
 CREATE TABLE manual_classification (
-    id serial PRIMARY KEY,
     kide_id varchar(30) NOT NULL REFERENCES kide ON DELETE CASCADE,
     class1 nn NOT NULL,
     class2 nn,
-    classified_by varchar REFERENCES user ON DELETE CASCADE
+    classified_by varchar REFERENCES user ON DELETE CASCADE,
+    quality boolean
 );
 
 CREATE OR REPLACE FUNCTION round_minutes(timestamp without time zone, integer DEFAULT 1) RETURNS timestamp without time zone
