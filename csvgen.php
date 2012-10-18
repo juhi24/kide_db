@@ -13,6 +13,12 @@ $reso=$_POST["resolution"];
 $tunit=$_POST["timeunit"];
 $sizemin=$_POST["size_min"];
 $sizemax=$_POST["size_max"];
+$armin=$_POST["ar_min"];
+$armax=$_POST["ar_max"];
+$aspratmin=$_POST["asprat_min"];
+$aspratmax=$_POST["asprat_max"];
+$datestart=$_POST["date_start"];
+$dateend=$_POST["date_end"];
 
 $statement="SELECT
         round_$tunit(time,$reso) AS interval,
@@ -29,7 +35,9 @@ $statement="SELECT
         (sum(ar*area(ar,dmax))/sum(area(ar,dmax)))::real AS ar_weighted_mean
 FROM kide
 WHERE dmax BETWEEN $sizemin AND $sizemax
-AND time BETWEEN '01-01-2000 00:00:00' AND '01-01-2012 00:00:00'
+AND time BETWEEN '$datestart' AND '$dateend'
+AND ar BETWEEN $armin AND $armax
+AND asprat BETWEEN $aspratmin AND $aspratmax
 GROUP BY interval
 ORDER BY interval
 ;";
@@ -46,8 +54,12 @@ $kysely->execute();
 }
 
 $file = fopen("output.csv", "w");
-
+$otsikot = array();
 while ($rivi = $kysely->fetch()) {
+    if (empty($otsikot)) {
+        $otsikot = array_keys($rivi);
+        fputcsv($file, $otsikot);
+    }
     //var_dump($rivi);
     fputcsv($file, $rivi);
 }
