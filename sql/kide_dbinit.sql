@@ -12,7 +12,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE kide (
-    id varchar(30) PRIMARY KEY NOT NULL,
+    id varchar(50) PRIMARY KEY NOT NULL,
     "time" timestamp without time zone NOT NULL,
     c1nn nn,
     c3nn nn,
@@ -31,7 +31,7 @@ CREATE TABLE kide (
 );
 
 CREATE TABLE manual_classification (
-    kide_id varchar(30) NOT NULL REFERENCES kide ON DELETE CASCADE,
+    kide_id varchar(50) NOT NULL REFERENCES kide ON DELETE CASCADE,
     class1 nn NOT NULL,
     class2 nn,
     classified_by varchar NOT NULL REFERENCES users ON DELETE CASCADE,

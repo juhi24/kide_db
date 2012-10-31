@@ -10,6 +10,8 @@ DROP TYPE IF EXISTS nwnn CASCADE;
 
 DROP TYPE IF EXISTS bayesian CASCADE;
 
+DROP TYPE IF EXISTS saitti CASCADE;
+
 DROP FUNCTION IF EXISTS round_minutes(timestamp without time zone, integer);
 
 DROP FUNCTION IF EXISTS round_seconds(timestamp without time zone, integer);
