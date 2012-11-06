@@ -27,7 +27,8 @@ CREATE TABLE kide (
     CHECK (ar_noholes > 0 AND ar_noholes < 1),
     asprat real NOT NULL,
     n_corners integer NOT NULL,
-    site saitti
+    site saitti,
+    quality boolean
 );
 
 CREATE TABLE manual_classification (
