@@ -3,7 +3,7 @@
 require_once 'yhteys.php';
 $yhteys = yhdista();
 
-$statement = "SELECT id FROM kide ORDER BY random() LIMIT 1000;";
+$statement = "SELECT id FROM kide";
 
 try {
     $kysely = $yhteys->prepare($statement);
@@ -11,9 +11,10 @@ try {
     file_put_contents('PDOErrors.txt', $e->getMessage(), FILE_APPEND);
     die("VIRHE: " . $e->getMessage());
 }
+$kysely->setFetchMode(PDO::FETCH_ASSOC);
+$kysely->execute();
+$rivi = $kysely->fetch();
 
-$id = $kysely->fetch();
-
-header("Location: manual_classification.php?id=$id")
+$id = $rivi["id"];
 
 ?>

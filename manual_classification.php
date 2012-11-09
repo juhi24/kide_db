@@ -12,7 +12,7 @@
         <br>
 
         <form method="post" action="manual_class.php" name="manual_classification">
-            <div style="text-align: center;"><img id="particle_img" alt="" src="img/<?php echo $id ?>.jpg" height="16" hspace="5" vspace="5" width="16"><br>
+            <div style="text-align: center;"><img id="particle_img" alt="" src="img/kide/<?php echo $id ?>.jpg" hspace="5" vspace="5"><br>
                 <br>
             </div>
             <br>
