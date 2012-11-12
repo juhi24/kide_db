@@ -1,5 +1,6 @@
 <?php
 
+require_once 'apu.php';
 require_once 'yhteys.php';
 $yhteys = yhdista();
 
@@ -15,7 +16,15 @@ if ($quality) {
     $qstr="false";
 }
 
-$statement = "INSERT INTO manual_classification (kide_id,class1,class2,classified_by,quality) VALUES ('$id','$c1','$c2','$author',$quality)";
+$c2_label="";
+$c2_value="";
+
+if (!empty($c2)) {
+    $c2_label="class2,";
+    $c2_value="'$c2',";
+} 
+
+$statement = "INSERT INTO manual_classification (kide_id,class1,$c2_label classified_by,quality) VALUES ('$id','$c1',$c2_value'$author',$qstr)";
 
 try {
     $kysely = $yhteys->prepare($statement);
@@ -29,5 +38,6 @@ try {
 //                       ':author'=>$author,
 //                       ':quality'=>$qstr));
 $kysely->execute();
+ohjaa("manual_classification.php");
 
 ?>

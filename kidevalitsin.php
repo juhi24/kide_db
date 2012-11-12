@@ -3,7 +3,10 @@
 require_once 'yhteys.php';
 $yhteys = yhdista();
 
-$statement = "SELECT id FROM kide";
+$statement = "SELECT id, class1
+    FROM (SELECT id FROM kide) AS ids LEFT JOIN manual_classification
+    ON ids.id=manual_classification.kide_id
+    WHERE class1 IS NULL";
 
 try {
     $kysely = $yhteys->prepare($statement);
