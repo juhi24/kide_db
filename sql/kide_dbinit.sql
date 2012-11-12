@@ -6,13 +6,13 @@ CREATE TYPE bayesian AS ENUM ('B', 'P', 'C', 'I', 'PA', 'CA', 'R', 'RA', 'NaN');
 
 CREATE TYPE saitti AS ENUM ('AAF', 'AMF', 'NSA', 'SGP', 'TWP', 'other');
 
-CREATE TABLE user (
+CREATE TABLE users (
     username varchar PRIMARY KEY NOT NULL,
     password varchar NOT NULL
 );
 
 CREATE TABLE kide (
-    id varchar(30) PRIMARY KEY NOT NULL,
+    id varchar(50) PRIMARY KEY NOT NULL,
     "time" timestamp without time zone NOT NULL,
     c1nn nn,
     c3nn nn,
@@ -31,10 +31,10 @@ CREATE TABLE kide (
 );
 
 CREATE TABLE manual_classification (
-    kide_id varchar(30) NOT NULL REFERENCES kide ON DELETE CASCADE,
+    kide_id varchar(50) NOT NULL REFERENCES kide ON DELETE CASCADE,
     class1 nn NOT NULL,
     class2 nn,
-    classified_by varchar NOT NULL REFERENCES user ON DELETE CASCADE,
+    classified_by varchar NOT NULL REFERENCES users ON DELETE CASCADE,
     quality boolean
 );
 

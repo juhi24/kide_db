@@ -1,6 +1,6 @@
 <?php
     header('Content-type: text/plain');
-    header('Content-Disposition: attachment; filename="output.txt"');
+    header('Content-Disposition: attachment; filename="output.csv"');
     
-    readfile('output.txt')
+    readfile('output.csv')
 ?>
