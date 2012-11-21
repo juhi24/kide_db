@@ -7,7 +7,7 @@
 
 
     </head><body>
-        Manual classification<br>
+        <h2>Manual classification</h2>
 
         <br>
 
@@ -18,25 +18,27 @@
             <br>
             <fieldset><legend>Particle classification</legend>
             Particle habit:<br>
-            <input name="class_primary" value="B" type="radio">bullet&nbsp;&nbsp;
-            <input name="class_primary" value="P" type="radio">plate&nbsp;&nbsp; 
-            <input name="class_primary" value="C" type="radio">column&nbsp;&nbsp; 
-            <input name="class_primary" value="R" type="radio">rosette&nbsp;&nbsp; 
-            <input name="class_primary" value="PA" type="radio">plate agg.&nbsp; 
-            <input name="class_primary" value="CA" type="radio">column agg.&nbsp; 
-            <input name="class_primary" value="RA" type="radio">rosette agg.<br>
+            <label for="B"><input name="class_primary" id="B" value="B" type="radio">bullet</label>&nbsp;&nbsp;
+            <label for="P"><input name="class_primary" id="P" value="P" type="radio">plate</label>&nbsp;&nbsp; 
+            <label for="C"><input name="class_primary" id="C" value="C" type="radio">column</label>&nbsp;&nbsp; 
+            <label for="R"><input name="class_primary" id="R" value="R" type="radio">rosette</label>&nbsp;&nbsp; 
+            <label for="PA"><input name="class_primary" id="PA" value="PA" type="radio">plate agg.</label>&nbsp; 
+            <label for="CA"><input name="class_primary" id="CA" value="CA" type="radio">column agg.</label>&nbsp; 
+            <label for="RA"><input name="class_primary" id="RA" value="RA" type="radio">rosette agg.</label>&nbsp; 
+            <label for="I"><input name="class_primary" id="I" value="I" type="radio">irregular</label><br>
             <br>
             Alternative habit (optional):<br>
-            <input name="class_alt" value="B" type="radio">bullet&nbsp;&nbsp; 
-            <input name="class_alt" value="P" type="radio">plate&nbsp;&nbsp; 
-            <input name="class_alt" value="C" type="radio">column&nbsp;&nbsp; 
-            <input name="class_alt" value="R" type="radio">rosette&nbsp;&nbsp; 
-            <input name="class_alt" value="PA" type="radio">plate agg.&nbsp; 
-            <input name="class_alt" value="CA" type="radio">column agg.&nbsp; 
-            <input name="class_alt" value="RA" type="radio">rosette agg.&nbsp;&nbsp;&nbsp; 
-            <input checked="checked" name="class_alt" value="" type="radio">(empty)</fieldset><br>
+            <label for="b"><input name="class_alt" id="b" value="B" type="radio">bullet</label>&nbsp;&nbsp; 
+            <label for="p"><input name="class_alt" id="p" value="P" type="radio">plate</label>&nbsp;&nbsp; 
+            <label for="c"><input name="class_alt" id="c" value="C" type="radio">column</label>&nbsp;&nbsp; 
+            <label for="r"><input name="class_alt" id="r" value="R" type="radio">rosette</label>&nbsp;&nbsp; 
+            <label for="pa"><input name="class_alt" id="pa" value="PA" type="radio">plate agg.</label>&nbsp; 
+            <label for="ca"><input name="class_alt" id="ca" value="CA" type="radio">column agg.</label>&nbsp; 
+            <label for="ra"><input name="class_alt" id="ra" value="RA" type="radio">rosette agg.</label>&nbsp; 
+            <label for="i"><input name="class_alt" id="i" value="I" type="radio">irregular</label>&nbsp;&nbsp; 
+            <label for="empty"><input checked="checked" id="empty" name="class_alt" value="" type="radio">(empty)</label></fieldset><br>
             <br>
-            <input type="checkbox" name="low_quality"> Mark image as low quality
+            <label for="quality"><input id="quality" type="checkbox" name="low_quality"> Mark image as low quality </label>
             <input type="hidden" name="id" value="<?php echo $id ?>">
             <br>
             <br>

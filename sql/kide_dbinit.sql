@@ -7,8 +7,8 @@ CREATE TYPE bayesian AS ENUM ('B', 'P', 'C', 'I', 'PA', 'CA', 'R', 'RA', 'NaN');
 CREATE TYPE saitti AS ENUM ('AAF', 'AMF', 'NSA', 'SGP', 'TWP', 'other');
 
 CREATE TABLE users (
-    username varchar PRIMARY KEY NOT NULL,
-    password varchar NOT NULL
+    username varchar(30) PRIMARY KEY NOT NULL,
+    password varchar(30) NOT NULL
 );
 
 CREATE TABLE kide (
@@ -30,11 +30,11 @@ CREATE TABLE kide (
     site saitti
 );
 
-CREATE TABLE manual_classification (
+CREATE TABLE man_class (
     kide_id varchar(50) NOT NULL REFERENCES kide ON DELETE CASCADE,
     class1 nn NOT NULL,
     class2 nn,
-    classified_by varchar NOT NULL REFERENCES users ON DELETE CASCADE,
+    classified_by varchar(30) NOT NULL REFERENCES users ON DELETE CASCADE,
     quality boolean
 );
 
