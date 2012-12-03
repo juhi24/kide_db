@@ -57,6 +57,8 @@
                         <option value="CA">column agg.</option>
                         <option value="RA">rosette agg.</option>
                         <option value="I">irregular</option>
+                    </select> by method <select name="method">
+                        <option selected="selected">5NN (default)</option>
                     </select>
                 </div>
             </fieldset>
