@@ -45,6 +45,21 @@
                     Aspect ratio between <input maxlength="4" size="5" name="asprat_min" value="1"> and <input maxlength="4" size="5" name="asprat_max" value="9999"><br>
                 </div>
             </fieldset>
+            <fieldset><legend>IC-PCA classification</legend>
+                <div style="display: none">
+                    Classified as <select name="autoclass">
+                        <option value="">any class</option>
+                        <option value="B">bullet</option>
+                        <option value="P">plate</option>
+                        <option value="C">column</option>
+                        <option value="R">rosette</option>
+                        <option value="PA">plate agg.</option>
+                        <option value="CA">column agg.</option>
+                        <option value="RA">rosette agg.</option>
+                        <option value="I">irregular</option>
+                    </select>
+                </div>
+            </fieldset>
             <fieldset><legend>Particle classification</legend>
                 Particle habit:<br>
                 <label for="B"><input name="class_primary" id="B" value="B" type="radio">bullet</label>&nbsp;&nbsp;
