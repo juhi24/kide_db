@@ -1,3 +1,7 @@
+<?php 
+require_once 'apu.php';
+varmista_kirjautuminen();
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -6,6 +10,8 @@
         <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>CSV Generator</title>
     </head>
     <body>
+        <?php require_once 'apu/header.html'; ?>
+        
         <h2>CSV-generator</h2>
 
         <br>

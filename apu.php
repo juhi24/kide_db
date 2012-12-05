@@ -9,8 +9,7 @@ function ohjaa($osoite) {
 }
 
 function on_kirjautunut() {
-    global $sessio;
-    return isset($sessio->kayttaja_id);
+    return isset($_SESSION["valid_user"]);
 }
 
 function varmista_kirjautuminen() {

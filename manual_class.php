@@ -47,6 +47,8 @@ $aspratmax=$_POST["asprat_max"];
 $datestart=$_POST["date_start"];
 $dateend=$_POST["date_end"];
 $sites=$_POST["site"];
+$autoclass=$_POST["autoclass"];
+$method=$_POST["method"];
 
 $sitesql =  saittifiltteri($sites);
 
@@ -59,6 +61,7 @@ $select = "SELECT id, class1
     AND ar BETWEEN :armin AND :armax
     AND asprat BETWEEN :aspratmin AND :aspratmax
     AND site $sitesql
+    AND $method = '$autoclass'
     AND ids.id NOT LIKE '$id'";
 
 try {

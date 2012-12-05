@@ -1,4 +1,7 @@
 <?php
+require_once 'apu.php';
+varmista_kirjautuminen();
+
 $id = $_GET["id"];
 if (!isset($id))
     require_once 'kidevalitsin.php';
@@ -6,7 +9,7 @@ if (!isset($id))
 <!DOCTYPE html>
 <html><head>
 
-        <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+        <meta content="text/html; charset=utf-8" http-equiv="content-type">
         <title>Manual classification</title>
 
         <script src="jquery.js"></script>
@@ -19,6 +22,9 @@ if (!isset($id))
         </script>
 
     </head><body>
+
+        <?php require_once 'apu/header.html'; ?>
+
         <h2>Manual classification</h2>
 
         <br>
@@ -38,7 +44,7 @@ if (!isset($id))
                     SGP<input name="site[]" value="SGP" type="checkbox">&nbsp;&nbsp;&nbsp; 
                     TWP<input name="site[]" value="TWP" type="checkbox">&nbsp;&nbsp;&nbsp; 
                     Other<input name="site[]" value="other" type="checkbox"><br>
-                    Timeframe: From <input type="datetime-local" name="date_start" value="2000-01-01T00:00:00.000"> 
+                    Time frame: From <input type="datetime-local" name="date_start" value="2000-01-01T00:00:00.000"> 
                     to <input type="datetime-local" name="date_end" value="2013-01-01T00:00:00.000"> <br>
                 </div>
             </fieldset>
@@ -62,7 +68,7 @@ if (!isset($id))
                         <option value="RA">rosette agg.</option>
                         <option value="I">irregular</option>
                     </select> by method <select name="method">
-                        <option selected="selected">5NN (default)</option>
+                        <option value="c5nn" selected="selected">5NN (default)</option>
                     </select>
                 </div>
             </fieldset>

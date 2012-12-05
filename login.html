@@ -10,16 +10,18 @@
         <link rel="stylesheet" href="css/main.css">
 
     </head><body>
-        <form method="post" action="kirjaudu.php" name="login">
-            
+        <div style="text-align: center;">
             <h1 style="text-align: center;">Login</h1><br>
-            <div style="text-align: center;">
-            <label for="user">Username:</label>
-            <input name="user" value="&lt;username&gt;" /><br>
-            <label for="pass">Password:</label>
-            <input value="password" name="pass" type="password" /><br>
-            <input type="submit" value="Login" />
-            </div>
-        </form>
 
+            <form method="post" action="kirjaudu.php?sisaan" name="login">
+                <fieldset>
+                    <label for="user">Username:</label>
+                    <input name="user" placeholder="&lt;username&gt;" /><br>
+                    <label for="pass">Password:</label>
+                    <input placeholder="&lt;password&gt;" name="pass" type="password" /><br>
+                    <input type="submit" value="Login" />
+
+                </fieldset>
+            </form>
+        </div>
     </body></html>
