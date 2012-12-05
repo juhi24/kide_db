@@ -1,4 +1,5 @@
 <?php
+require_once 'apu.php';
 
 //Yhteyden muodostus
 require_once 'yhteys.php';
@@ -17,22 +18,8 @@ $datestart=$_POST["date_start"];
 $dateend=$_POST["date_end"];
 $sites=$_POST["site"];
 
-$sitesql="";
+$sitesql=  saittifiltteri($sites);
 $qualitysql="";
-
-//Määritellään saittifiltteri.
-if (empty($sites)) {
-    $sitesql="IS NULL"; //mukana vain NULL jos yhtään saittia ei valittuna
-} else {
-    $sitesql.="='$sites[0]'";
-    $N = count($sites);
-    for ($i=1; $i < $N; $i++) {
-        $sitesql.=" OR site='$sites[$i]'";
-        if ($sites[$i] === "other") {
-            $sitesql.=" OR site IS NULL"; //NULL site lasketaan other siteksi
-        }
-    }
-}
 
 if (!empty($_POST["quality"])) {
     $qualitysql="AND quality IS NULL OR quality=true";

@@ -1,10 +1,14 @@
-<?php require_once 'kidevalitsin.php'; ?>
+<?php
+$id = $_GET["id"];
+if (!isset($id))
+    require_once 'kidevalitsin.php';
+?>
 <!DOCTYPE html>
 <html><head>
 
         <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
         <title>Manual classification</title>
-        
+
         <script src="jquery.js"></script>
         <script>
             $(function(){
@@ -24,7 +28,7 @@
                 <br>
             </div>
             <br>
-            
+
             <fieldset><legend>Select dataset</legend>
                 <div style="display: none">
                     Site(s):&nbsp;&nbsp;&nbsp; 
