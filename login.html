@@ -6,15 +6,14 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/main.css">
-
+        <script src="js/jquery.js"></script>
+        <script src="js/hidden_fieldset.js"></script>
     </head><body>
         <div style="text-align: center;">
             <h1 style="text-align: center;">Login</h1><br>
 
             <form method="post" action="kirjaudu.php?sisaan" name="login">
-                <fieldset>
+                <fieldset style="border: 0">
                     <label for="user">Username:</label>
                     <input name="user" placeholder="&lt;username&gt;" /><br>
                     <label for="pass">Password:</label>
@@ -24,4 +23,14 @@
                 </fieldset>
             </form>
         </div>
+        <form method="post" action="mail.php">
+            <fieldset><legend>Request account</legend>
+                <div style="display: none">
+                <p>Requested username:</p> <input type="text" name="name">
+                <p>your email:</p> <input type="text" name="email">
+                <p>Message/account purpose (optional):</p><textarea name="message" rows="6" cols="42"></textarea><br />
+                <input type="submit" value="Send request"><input type="reset" value="Clear">
+                </div>
+            </fieldset>
+        </form>
     </body></html>

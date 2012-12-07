@@ -8,7 +8,8 @@ CREATE TYPE saitti AS ENUM ('AAF', 'AMF', 'NSA', 'SGP', 'TWP', 'other');
 
 CREATE TABLE users (
     username varchar(30) PRIMARY KEY NOT NULL,
-    password varchar(30) NOT NULL
+    password varchar(30) NOT NULL,
+    email varchar(50) NOT NULL
 );
 
 CREATE TABLE kide (

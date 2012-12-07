@@ -12,14 +12,8 @@ if (!isset($id))
         <meta content="text/html; charset=utf-8" http-equiv="content-type">
         <title>Manual classification</title>
 
-        <script src="jquery.js"></script>
-        <script>
-            $(function(){
-                $("legend").click(function(){
-                    $(this).siblings().slideToggle("slow");
-                });
-            });
-        </script>
+        <script src="js/jquery.js"></script>
+        <script src="js/hidden_fieldset.js"></script>
 
     </head><body>
 
