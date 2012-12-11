@@ -46,11 +46,37 @@ $aspratmin=$_POST["asprat_min"];
 $aspratmax=$_POST["asprat_max"];
 $datestart=$_POST["date_start"];
 $dateend=$_POST["date_end"];
-$sites=$_POST["site"];
+$site_selection=$_POST["site"];
 $autoclass=$_POST["autoclass"];
 $method=$_POST["method"];
 
-$sitesql =  saittifiltteri($sites);
+$_SESSION["man_sizemin"]=$sizemin;
+$_SESSION["man_sizemax"]=$sizemax;
+$_SESSION["man_armin"]=$armin;
+$_SESSION["man_armax"]=$armax;
+$_SESSION["man_aspratmin"]=$aspratmin;
+$_SESSION["man_aspratmax"]=$aspratmax;
+$_SESSION["man_datestart"]=$datestart;
+$_SESSION["man_dateend"]=$dateend;
+$_SESSION["man_sites"]=$site_selection;
+$_SESSION["man_autoclass"]=$autoclass;
+$_SESSION["man_method"]=$method;
+
+//clear old value
+$_SESSION["selected_any"]="";
+foreach ($classarr as $class) {
+    $_SESSION["selected_$class[0]"]="";
+}
+
+//set new value
+$_SESSION["selected_$autoclass"] = "selected";
+
+$sitesql =  saittifiltteri($site_selection);
+$methodsql = "";
+
+if ($autoclass !== "any") {
+    $methodsql = "AND $method = '$autoclass'";
+}
 
 $select = "SELECT id, class1
     FROM (SELECT * FROM kide) AS ids LEFT JOIN manual_classification
@@ -61,7 +87,7 @@ $select = "SELECT id, class1
     AND ar BETWEEN :armin AND :armax
     AND asprat BETWEEN :aspratmin AND :aspratmax
     AND site $sitesql
-    AND $method = '$autoclass'
+    $methodsql
     AND ids.id NOT LIKE '$id'";
 
 try {

@@ -1,32 +1,30 @@
-<?php 
+<?php
 require_once 'apu.php';
 varmista_kirjautuminen();
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-
-
-        <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>CSV Generator</title>
+        <meta content="text/html; charset=utf-8" http-equiv="content-type">
+        <title>CSV Generator</title>
     </head>
     <body>
+
         <?php require_once 'apu/header.html'; ?>
-        
+
         <h2>CSV-generator</h2>
-
         <br>
-
         <form method="post" action="csvgen.php" name="csv-generator"><br>
             <fieldset><legend>Select dataset</legend>
                 Site(s):&nbsp;&nbsp;&nbsp; 
-                AAF<input name="site[]" value="AAF" type="checkbox">&nbsp;&nbsp;&nbsp; 
-                AMF<input name="site[]" value="AMF" type="checkbox">&nbsp;&nbsp;&nbsp; 
-                NSA<input name="site[]" value="NSA" type="checkbox">&nbsp;&nbsp;&nbsp; 
-                SGP<input name="site[]" value="SGP" type="checkbox">&nbsp;&nbsp;&nbsp; 
-                TWP<input name="site[]" value="TWP" type="checkbox">&nbsp;&nbsp;&nbsp; 
+                <?php
+                foreach ($sitearr as $site) {
+                    echo "$site<input name=\"site[]\" value=\"$site\" type=\"checkbox\">&nbsp;&nbsp;&nbsp;";
+                }
+                ?> 
                 Other<input name="site[]" value="other" type="checkbox"><br>
-                Timeframe: From <input type="datetime-local" name="date_start" value="2000-01-01T00:00:00.000"> 
-                            to <input type="datetime-local" name="date_end" value="2013-01-01T00:00:00.000"> <br>
+                Time frame: From <input type="datetime-local" name="date_start" value="2000-01-01T00:00:00.000"> 
+                to <input type="datetime-local" name="date_end" value="2013-01-01T00:00:00.000"> <br>
             </fieldset>
             <br>
             Time resolution: 

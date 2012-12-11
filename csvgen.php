@@ -16,9 +16,9 @@ $aspratmin=$_POST["asprat_min"];
 $aspratmax=$_POST["asprat_max"];
 $datestart=$_POST["date_start"];
 $dateend=$_POST["date_end"];
-$sites=$_POST["site"];
+$site_selection=$_POST["site"];
 
-$sitesql=  saittifiltteri($sites);
+$sitesql=  saittifiltteri($site_selection);
 $qualitysql="";
 
 if (!empty($_POST["quality"])) {

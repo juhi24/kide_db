@@ -32,11 +32,11 @@ if (!isset($id))
             <fieldset><legend>Select dataset</legend>
                 <div style="display: none">
                     Site(s):&nbsp;&nbsp;&nbsp; 
-                    AAF<input name="site[]" value="AAF" type="checkbox">&nbsp;&nbsp;&nbsp; 
-                    AMF<input name="site[]" value="AMF" type="checkbox">&nbsp;&nbsp;&nbsp; 
-                    NSA<input name="site[]" value="NSA" type="checkbox">&nbsp;&nbsp;&nbsp; 
-                    SGP<input name="site[]" value="SGP" type="checkbox">&nbsp;&nbsp;&nbsp; 
-                    TWP<input name="site[]" value="TWP" type="checkbox">&nbsp;&nbsp;&nbsp; 
+                    <?php
+                    foreach ($sitearr as $site) {
+                        echo "$site<input name=\"site[]\" value=\"$site\" type=\"checkbox\">&nbsp;&nbsp;&nbsp;";
+                    }
+                    ?> 
                     Other<input name="site[]" value="other" type="checkbox"><br>
                     Time frame: From <input type="datetime-local" name="date_start" value="2000-01-01T00:00:00.000"> 
                     to <input type="datetime-local" name="date_end" value="2013-01-01T00:00:00.000"> <br>
@@ -52,17 +52,14 @@ if (!isset($id))
             <fieldset><legend>IC-PCA classification</legend>
                 <div style="display: none">
                     Classified as <select name="autoclass">
-                        <option value="">any class</option>
-                        <option value="B">bullet</option>
-                        <option value="P">plate</option>
-                        <option value="C">column</option>
-                        <option value="R">rosette</option>
-                        <option value="PA">plate agg.</option>
-                        <option value="CA">column agg.</option>
-                        <option value="RA">rosette agg.</option>
-                        <option value="I">irregular</option>
+                        <option value="any" <?php $_SESSION["selected_any"] ?>>any class</option>
+                        <?php
+                        foreach ($classarr as $class) {
+                            echo "<option value='$class[0]' {$_SESSION["selected_{$class[0]}"]}>{$class[1]}</option>";
+                        }
+                        ?>
                     </select> by method <select name="method">
-                        <option value="c5nn" selected="selected">5NN (default)</option>
+                        <option value="c5nn" selected>5NN (default)</option>
                     </select>
                 </div>
             </fieldset>

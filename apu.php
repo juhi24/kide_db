@@ -1,7 +1,17 @@
 <?php
 
 require_once 'apu/kyselyt.php';
-require_once 'apu/sessio.php';
+
+$sitearr = array("AAF","AMF","NSA","SGP","TWP");
+$classarr = array(
+    array("B","bullet"),
+    array("P","plate"),
+    array("C","column"),
+    array("R","rosette"),
+    array("PA","plate agg."),
+    array("CA","column agg."),
+    array("RA","rosette agg."),
+    array("I","irregular"));
 
 function ohjaa($osoite) {
     header("Location: $osoite");
