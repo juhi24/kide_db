@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 require_once 'apu.php';
 
 if (isset($_GET['sisaan'])) {

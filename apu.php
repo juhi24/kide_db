@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once 'apu/kyselyt.php';
 
 $sitearr = array("AAF","AMF","NSA","SGP","TWP");
