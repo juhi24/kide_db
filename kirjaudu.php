@@ -11,7 +11,6 @@ if (isset($_GET['sisaan'])) {
     $kayttaja = $kyselija->tunnista($user, $pass);
     if ($kayttaja) {
         $_SESSION["valid_user"]=$kayttaja->username;
-        ohjaa('index.php');
     } else {
         die("Login incorrect!");
         //ohjaa('login.html');
@@ -19,8 +18,9 @@ if (isset($_GET['sisaan'])) {
 } elseif (isset($_GET['ulos'])) {
     session_unset();
     session_destroy();
-    ohjaa('index.php');
 } else {
     die('Illegal action!');
 }
+
+ohjaa('index.php');
 ?>

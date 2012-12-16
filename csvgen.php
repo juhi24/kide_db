@@ -1,37 +1,38 @@
 <?php
+
 require_once 'apu.php';
 
 //Yhteyden muodostus
 require_once 'yhteys.php';
-$yhteys=yhdista();
+$yhteys = yhdista();
 
 //arvot lomakkeelta
-$reso=$_POST["resolution"];
-$tunit=$_POST["timeunit"];
-$sizemin=$_POST["size_min"];
-$sizemax=$_POST["size_max"];
-$armin=$_POST["ar_min"];
-$armax=$_POST["ar_max"];
-$aspratmin=$_POST["asprat_min"];
-$aspratmax=$_POST["asprat_max"];
-$datestart=$_POST["date_start"];
-$dateend=$_POST["date_end"];
-$site_selection=$_POST["site"];
+$reso = $_POST["resolution"];
+$tunit = $_POST["timeunit"];
+$sizemin = $_POST["size_min"];
+$sizemax = $_POST["size_max"];
+$armin = $_POST["ar_min"];
+$armax = $_POST["ar_max"];
+$aspratmin = $_POST["asprat_min"];
+$aspratmax = $_POST["asprat_max"];
+$datestart = $_POST["date_start"];
+$dateend = $_POST["date_end"];
+$site_selection = $_POST["site"];
 
-$sitesql=  saittifiltteri($site_selection);
-$qualitysql="";
+$sitesql = saittifiltteri($site_selection);
+$qualitysql = "";
 
 if (!empty($_POST["quality"])) {
-    $qualitysql="AND quality IS NULL OR quality=true";
+    $qualitysql = "AND quality IS NULL OR quality=true";
 }
 
-$count="";
+$count = "";
 
 foreach ($classarr as $class) {
     $count .= "COUNT(NULLIF(c5nn='$class[0]',FALSE)) AS $class[0], ";
 }
 
-$statement="SELECT
+$statement = "SELECT
         round_$tunit(time, :reso ) AS interval,
         COUNT(*) AS tot,
         $count
@@ -49,9 +50,9 @@ ORDER BY interval";
 
 //kyselyn suoritus
 try {
-$kysely = $yhteys->prepare($statement, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-$kysely->setFetchMode(PDO::FETCH_ASSOC);
-$kysely->execute(array(':reso' => $reso, ':sizemin' => $sizemin, ':sizemax' => $sizemax,
+    $kysely = $yhteys->prepare($statement, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $kysely->setFetchMode(PDO::FETCH_ASSOC);
+    $kysely->execute(array(':reso' => $reso, ':sizemin' => $sizemin, ':sizemax' => $sizemax,
         ':datestart' => $datestart, ':dateend' => $dateend, 'armin' => $armin,
         ':armax' => $armax, ':aspratmin' => $aspratmin, ':aspratmax' => $aspratmax));
 } catch (PDOException $e) {
@@ -72,6 +73,8 @@ while ($rivi = $kysely->fetch()) {
 }
 fclose($file);
 
-require_once 'csvLataaja.php';
+header('Content-type: text/plain');
+header('Content-Disposition: attachment; filename="output.csv"');
 
+readfile('output.csv')
 ?>
