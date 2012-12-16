@@ -12,7 +12,7 @@ class kyselyt {
         try {
         return $this->_pdo->prepare($sqllause);
         } catch (PDOException $e) {
-            die("VIRHE: " . $e->getMessage());
+            die("ERROR: " . $e->getMessage());
         }
     }
 
@@ -21,7 +21,7 @@ class kyselyt {
         if ($kysely->execute(array($tunnus, $salasana))) {
             return $kysely->fetchObject();
         } else {
-            die("EITOIMI!");
+            die("ERROR!");
             return null;
         }
     }

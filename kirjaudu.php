@@ -21,6 +21,6 @@ if (isset($_GET['sisaan'])) {
     session_destroy();
     ohjaa('index.php');
 } else {
-    die('Laiton toiminto!');
+    die('Illegal action!');
 }
 ?>
