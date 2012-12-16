@@ -6,8 +6,12 @@ $yhteys = yhdista();
 $id=$_POST["id"];
 $c1=$_POST["class_primary"];
 $c2=$_POST["class_alt"];
-$author="anonymous"; //to-do
+$author=$_SESSION["valid_user"];
 $quality = empty($_POST["low_quality"]);
+
+if (!isset($c1)) {
+    die('Please choose particle habit!');
+}
 
 if ($quality) {
     $qstr="true";

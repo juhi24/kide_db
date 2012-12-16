@@ -3,8 +3,11 @@ require_once 'apu.php';
 varmista_kirjautuminen();
 
 $id = $_GET["id"];
-if (!isset($id))
+if (!isset($id)) {
     require_once 'kidevalitsin.php';
+} elseif ($id=="") {
+    die("No such particle was found to be classified. Please modify your particle filter options.");
+}
 ?>
 <!DOCTYPE html>
 <html><head>
@@ -34,7 +37,7 @@ if (!isset($id))
                     Site(s):&nbsp;&nbsp;&nbsp; 
                     <?php
                     foreach ($sitearr as $site) {
-                        echo "$site<input name=\"site[]\" value=\"$site\" type=\"checkbox\">&nbsp;&nbsp;&nbsp;";
+                        echo "$site<input name=\"site[]\" value=\"$site\" type=\"checkbox\" {$_SESSION["selected_{$site}"]}>&nbsp;&nbsp;&nbsp;";
                     }
                     ?> 
                     Other<input name="site[]" value="other" type="checkbox"><br>
