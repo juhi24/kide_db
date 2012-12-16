@@ -12,7 +12,7 @@ try {
     $kysely = $yhteys->prepare($statement);
 } catch (PDOException $e) {
     file_put_contents('PDOErrors.txt', $e->getMessage(), FILE_APPEND);
-    die("VIRHE: " . $e->getMessage());
+    die("ERROR: " . $e->getMessage());
 }
 $kysely->setFetchMode(PDO::FETCH_ASSOC);
 $kysely->execute();

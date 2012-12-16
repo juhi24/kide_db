@@ -33,7 +33,7 @@ try {
     $insert_kysely = $yhteys->prepare($insert);
 } catch (PDOException $e) {
     file_put_contents('PDOErrors.txt', $e->getMessage(), FILE_APPEND);
-    die("VIRHE: " . $e->getMessage());
+    die("ERROR: " . $e->getMessage());
 }
 //$kysely->execute(array(':id'=>$id,
 //                       ':c1'=>$c1,
@@ -102,7 +102,7 @@ $kysely->execute(array(':sizemin' => $sizemin, ':sizemax' => $sizemax,
         ':armax' => $armax, ':aspratmin' => $aspratmin, ':aspratmax' => $aspratmax));
 } catch (PDOException $e) {
     file_put_contents('PDOErrors.txt', $e->getMessage(), FILE_APPEND);
-    die("VIRHE: " . $e->getMessage());
+    die("ERROR: " . $e->getMessage());
 }
 
 $rivi = $kysely->fetch();

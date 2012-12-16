@@ -68,25 +68,23 @@ if (!isset($id)) {
             </fieldset>
             <fieldset><legend>Particle classification</legend>
                 Particle habit:<br>
-                <label for="B"><input name="class_primary" id="B" value="B" type="radio">bullet</label>&nbsp;&nbsp;
-                <label for="P"><input name="class_primary" id="P" value="P" type="radio">plate</label>&nbsp;&nbsp; 
-                <label for="C"><input name="class_primary" id="C" value="C" type="radio">column</label>&nbsp;&nbsp; 
-                <label for="R"><input name="class_primary" id="R" value="R" type="radio">rosette</label>&nbsp;&nbsp; 
-                <label for="PA"><input name="class_primary" id="PA" value="PA" type="radio">plate agg.</label>&nbsp; 
-                <label for="CA"><input name="class_primary" id="CA" value="CA" type="radio">column agg.</label>&nbsp; 
-                <label for="RA"><input name="class_primary" id="RA" value="RA" type="radio">rosette agg.</label>&nbsp; 
-                <label for="I"><input name="class_primary" id="I" value="I" type="radio">irregular</label><br>
+                <?php
+                foreach ($classarr as $class) {
+                    echo "<label for='$class[0]'><input name='class_primary' id='$class[0]' value='$class[0]' type='radio'>$class[1]</label>&nbsp;&nbsp;";
+                }
+                ?>
+                <br>
                 <br>
                 Alternative habit (optional):<br>
-                <label for="b"><input name="class_alt" id="b" value="B" type="radio">bullet</label>&nbsp;&nbsp; 
-                <label for="p"><input name="class_alt" id="p" value="P" type="radio">plate</label>&nbsp;&nbsp; 
-                <label for="c"><input name="class_alt" id="c" value="C" type="radio">column</label>&nbsp;&nbsp; 
-                <label for="r"><input name="class_alt" id="r" value="R" type="radio">rosette</label>&nbsp;&nbsp; 
-                <label for="pa"><input name="class_alt" id="pa" value="PA" type="radio">plate agg.</label>&nbsp; 
-                <label for="ca"><input name="class_alt" id="ca" value="CA" type="radio">column agg.</label>&nbsp; 
-                <label for="ra"><input name="class_alt" id="ra" value="RA" type="radio">rosette agg.</label>&nbsp; 
-                <label for="i"><input name="class_alt" id="i" value="I" type="radio">irregular</label>&nbsp;&nbsp; 
-                <label for="empty"><input checked="checked" id="empty" name="class_alt" value="" type="radio">(empty)</label></fieldset><br>
+                <?php 
+                foreach ($classarr as $class) {
+                    $lowclass = strtolower($class[0]);
+                    echo "<label for='$lowclass'><input name='class_alt' id='$lowclass' value='$class[0]' type='radio'>$class[1]</label>&nbsp;&nbsp; ";
+                }
+                ?>
+                <label for="empty"><input checked="checked" id="empty" name="class_alt" value="" type="radio">(empty)</label>
+            </fieldset>
+            <br>
             <label for="quality"><input id="quality" type="checkbox" name="low_quality"> Mark image as low quality </label>
             <input type="hidden" name="id" value="<?php echo $id ?>">
             <br>
