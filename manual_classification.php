@@ -2,7 +2,9 @@
 require_once 'apu.php';
 varmista_kirjautuminen();
 
-$id = $_GET["id"];
+$id = $_GET["id"]; //Luokiteltavan kiteen id.
+
+//Jos kidettä ei saada GETillä, valitaan se kidevalitsimella. Tyhjä id implikoi ettei haun mukaista kidettä löydy.
 if (!isset($id)) {
     require_once 'kidevalitsin.php';
 } elseif ($id=="") {
@@ -66,7 +68,7 @@ if (!isset($id)) {
                     </select>
                 </div>
             </fieldset>
-            <fieldset><legend>Particle classification</legend>
+            <fieldset><legend>Your classification</legend>
                 Particle habit:<br>
                 <?php
                 foreach ($classarr as $class) {
