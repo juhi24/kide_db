@@ -3,11 +3,10 @@ require_once 'apu.php';
 varmista_kirjautuminen();
 
 $id = $_GET["id"]; //Luokiteltavan kiteen id.
-
 //Jos kidettä ei saada GETillä, valitaan se kidevalitsimella. Tyhjä id implikoi ettei haun mukaista kidettä löydy.
 if (!isset($id)) {
     require_once 'kidevalitsin.php';
-} elseif ($id=="") {
+} elseif ($id == "") {
     die("No such particle was found to be classified. Please modify your particle filter options.");
 }
 ?>
@@ -49,7 +48,7 @@ if (!isset($id)) {
             </fieldset>
             <fieldset><legend>Particle properties</legend>
                 <div style="display: none">
-                    Maximum diameter between <input maxlength="4" size="5" name="size_min" value="0">um and <input maxlength="4" size="5" name="size_max" value="9999">um<br>
+                    Maximum diameter between <input maxlength="4" size="5" name="size_min" value="0" min="0">um and <input maxlength="4" size="5" name="size_max" value="9999">um<br>
                     Area ratio between <input maxlength="4" size="5" name="ar_min" value="0"> and <input maxlength="4" size="5" name="ar_max" value="1"><br>
                     Aspect ratio between <input maxlength="4" size="5" name="asprat_min" value="1"> and <input maxlength="4" size="5" name="asprat_max" value="9999"><br>
                 </div>
@@ -78,7 +77,7 @@ if (!isset($id)) {
                 <br>
                 <br>
                 Alternative habit (optional):<br>
-                <?php 
+                <?php
                 foreach ($classarr as $class) {
                     $lowclass = strtolower($class[0]);
                     echo "<label for='$lowclass'><input name='class_alt' id='$lowclass' value='$class[0]' type='radio'>$class[1]</label>&nbsp;&nbsp; ";
@@ -91,7 +90,9 @@ if (!isset($id)) {
             <input type="hidden" name="id" value="<?php echo $id ?>">
             <br>
             <br>
-            <input name="submit" type="submit" value="Classify"><input name="reset" type="reset"><br>
+            <input type="submit" name="classify" value="Classify">
+            <input name="reset" type="reset" value="Reset to latest values">
+            <input type="submit" name="defaults" value="Reset to defaults"><br>
         </form>
 
     </body></html>
