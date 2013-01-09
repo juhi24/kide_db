@@ -16,14 +16,19 @@ if (!isset($id)) {
         <meta content="text/html; charset=utf-8" http-equiv="content-type">
         <title>Manual classification</title>
 
+        <link rel="stylesheet" href="css/slimbox2.css" media="screen" />
         <script src="js/jquery.js"></script>
         <script src="js/hidden_fieldset.js"></script>
+        <script src="js/slimbox2.js"></script>
 
     </head><body>
 
         <?php require_once 'apu/header.html'; ?>
 
         <h2>Manual classification</h2>
+        <a href="img/classification_reference.png" rel="lightbox" title="1) plate, 2)bullet, 3) column, 4) irregular, 5) rosette aggregate, 6) rosette, 7) plate aggregates, 8) column aggregate">
+            classification reference
+        </a>
 
         <br>
 
@@ -40,17 +45,20 @@ if (!isset($id)) {
                     foreach ($sitearr as $site) {
                         echo "$site<input name=\"site[]\" value=\"$site\" type=\"checkbox\" {$_SESSION["selected_{$site}"]}>&nbsp;&nbsp;&nbsp;";
                     }
-                    ?> 
-                    Other<input name="site[]" value="other" type="checkbox"><br>
-                    Time frame: From <input type="datetime-local" name="date_start" value="2000-01-01T00:00:00.000"> 
-                    to <input type="datetime-local" name="date_end" value="2013-01-01T00:00:00.000"> <br>
+                    
+                    echo 'Other<input name="site[]" value="other" type="checkbox"><br>';
+                    echo "Time frame: From <input type='datetime-local' name='date_start' value='{$_SESSION["man_datestart"]}'>";
+                    echo "to <input type='datetime-local' name='date_end' value='{$_SESSION["man_dateend"]}'> <br>";
+                    ?>
                 </div>
             </fieldset>
             <fieldset><legend>Particle properties</legend>
                 <div style="display: none">
-                    Maximum diameter between <input maxlength="4" size="5" name="size_min" value="0" min="0">um and <input maxlength="4" size="5" name="size_max" value="9999">um<br>
-                    Area ratio between <input maxlength="4" size="5" name="ar_min" value="0"> and <input maxlength="4" size="5" name="ar_max" value="1"><br>
-                    Aspect ratio between <input maxlength="4" size="5" name="asprat_min" value="1"> and <input maxlength="4" size="5" name="asprat_max" value="9999"><br>
+                    <?php
+                    echo "Maximum diameter between <input maxlength='4' size='5' name='size_min' value='{$_SESSION["man_sizemin"]}' min='0'>um and <input maxlength='4' size='5' name='size_max' value='{$_SESSION["man_sizemax"]}'>um<br>";
+                    echo "Area ratio between <input maxlength='4' size='5' name='ar_min' value='{$_SESSION["man_armin"]}'> and <input maxlength='4' size='5' name='ar_max' value='{$_SESSION["man_armax"]}'><br>";
+                    echo "Aspect ratio between <input maxlength='4' size='5' name='asprat_min' value='{$_SESSION["man_aspratmin"]}'> and <input maxlength='4' size='5' name='asprat_max' value='{$_SESSION["man_aspratmax"]}'><br>";
+                    ?>
                 </div>
             </fieldset>
             <fieldset><legend>IC-PCA classification</legend>

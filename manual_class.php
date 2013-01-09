@@ -104,9 +104,7 @@ if (isset($_POST['classify'])) {
         die("ERROR: " . $e->getMessage());
     }
 
-    $rivi = $kysely->fetch();
-
-    $id_next = $rivi["id"];
+    $id_next = choose_kide($kysely);
 
     ohjaa("manual_classification.php?id=$id_next");
 } else if (isset($_POST['defaults'])) {

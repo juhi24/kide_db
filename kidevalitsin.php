@@ -1,5 +1,5 @@
 <?php
-
+require_once 'apu.php';
 require_once 'yhteys.php';
 $yhteys = yhdista();
 
@@ -16,8 +16,6 @@ try {
 }
 $kysely->setFetchMode(PDO::FETCH_ASSOC);
 $kysely->execute();
-$rivi = $kysely->fetch();
 
-$id = $rivi["id"];
-
+$id = choose_kide($kysely);
 ?>

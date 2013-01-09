@@ -14,6 +14,17 @@ $classarr = array(
     array("CA", "column agg."),
     array("RA", "rosette agg."),
     array("I", "irregular"));
+$default = array(
+    "sizemin" => 0,
+    "sizemax" => 9999,
+    "armin" => 0,
+    "armax" => 1,
+    "aspratmin" => 1,
+    "aspratmax" => 9999,
+    "datestart" => "2000-01-01T00:00:00.000",
+    "dateend" => "2015-01-01T00:00:00.000",
+    "method" => "c5nn"
+);
 
 function ohjaa($osoite) {
     header("Location: $osoite");
@@ -49,18 +60,19 @@ function saittifiltteri($sites) {
 }
 
 function reset_defaults() {
-    $_SESSION["man_sizemin"] = 0;
-    $_SESSION["man_sizemax"] = 9999;
-    $_SESSION["man_armin"] = 0;
-    $_SESSION["man_armax"] = 1;
-    $_SESSION["man_aspratmin"] = 1;
-    $_SESSION["man_aspratmax"] = 9999;
-    $_SESSION["man_datestart"] = "2000-01-01T00:00:00.000";
-    $_SESSION["man_dateend"] = "2015-01-01T00:00:00.000";
+    global $default;
+    $_SESSION["man_sizemin"] = $default["sizemin"];
+    $_SESSION["man_sizemax"] = $default["sizemax"];
+    $_SESSION["man_armin"] = $default["armin"];
+    $_SESSION["man_armax"] = $default["armax"];
+    $_SESSION["man_aspratmin"] = $default["aspratmin"];
+    $_SESSION["man_aspratmax"] = $default["aspratmax"];
+    $_SESSION["man_datestart"] = $default["datestart"];
+    $_SESSION["man_dateend"] = $default["dateend"];
     unset($_SESSION["man_sites"]);
     unset($_SESSION["man_autoclass"]);
-    $_SESSION["man_method"] = "c5nn";
-    
+    $_SESSION["man_method"] = $default["method"];
+
     clear_class_selection(); //clear class selection
     $_SESSION["selected_any"] = "selected"; //select default value
 }
@@ -72,4 +84,15 @@ function clear_class_selection() {
         $_SESSION["selected_$class[0]"] = "";
     }
 }
+
+function choose_kide(PDOStatement $kysely) {
+    while ($rivi = $kysely->fetch()) {
+        $id = $rivi["id"];
+        if (file_exists("img/kide/$id.jpg")) {
+            break;
+        }
+    }
+    return $id;
+}
+
 ?>

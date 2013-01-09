@@ -21,10 +21,10 @@ varmista_kirjautuminen();
                 foreach ($sitearr as $site) {
                     echo "$site<input name=\"site[]\" value=\"$site\" type=\"checkbox\">&nbsp;&nbsp;&nbsp;";
                 }
-                ?> 
-                Other<input name="site[]" value="other" type="checkbox"><br>
-                Time frame: From <input type="datetime-local" name="date_start" value="2000-01-01T00:00:00.000"> 
-                to <input type="datetime-local" name="date_end" value="2013-01-01T00:00:00.000"> <br>
+                echo 'Other<input name="site[]" value="other" type="checkbox"><br>';
+                echo "Time frame: From <input type='datetime-local' name='date_start' value='{$default["datestart"]}'>";
+                echo "to <input type='datetime-local' name='date_end' value='{$default["dateend"]}'> <br>";
+                ?>
             </fieldset>
             <br>
             Time resolution: 
@@ -45,9 +45,11 @@ varmista_kirjautuminen();
             <br>
             <br>
             <fieldset><legend>Particle properties</legend>
-                Maximum diameter between <input maxlength="4" size="5" name="size_min" value="0">um and <input maxlength="4" size="5" name="size_max" value="9999">um<br>
-                Area ratio between <input maxlength="4" size="5" name="ar_min" value="0"> and <input maxlength="4" size="5" name="ar_max" value="1"><br>
-                Aspect ratio between <input maxlength="4" size="5" name="asprat_min" value="1"> and <input maxlength="4" size="5" name="asprat_max" value="9999"><br>
+                <?php
+                echo "Maximum diameter between <input maxlength='4' size='5' name='size_min' value='{$default["sizemin"]}' min='0'>um and <input maxlength='4' size='5' name='size_max' value='{$default["sizemax"]}'>um<br>";
+                echo "Area ratio between <input maxlength='4' size='5' name='ar_min' value='{$default["armin"]}'> and <input maxlength='4' size='5' name='ar_max' value='{$default["armax"]}'><br>";
+                echo "Aspect ratio between <input maxlength='4' size='5' name='asprat_min' value='{$default["aspratmin"]}'> and <input maxlength='4' size='5' name='asprat_max' value='{$default["aspratmax"]}'><br>";
+                ?>
             </fieldset>
 
             <br>

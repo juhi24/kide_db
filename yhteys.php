@@ -11,6 +11,4 @@ function yhdista() {
     return $yhteys;
 }
 
-
-
 ?>
