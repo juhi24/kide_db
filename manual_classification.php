@@ -80,7 +80,7 @@ if (!isset($id)) {
                 Particle habit:<br>
                 <?php
                 foreach ($classarr as $class) {
-                    echo "<label for='$class[0]'><input name='class_primary' id='$class[0]' value='$class[0]' type='radio'>$class[1]</label>&nbsp;&nbsp;";
+                    echo "<label for='$class[0]'><input type='radio' name='class_primary' id='$class[0]' value='$class[0]' accesskey='$class[0]'>$class[1]</label>&nbsp;&nbsp;";
                 }
                 ?>
                 <br>
@@ -89,7 +89,7 @@ if (!isset($id)) {
                 <?php
                 foreach ($classarr as $class) {
                     $lowclass = strtolower($class[0]);
-                    echo "<label for='$lowclass'><input type='radio' name='class_alt' id='$lowclass' value='$class[0]' accesskey='$class[0]'>$class[1]</label>&nbsp;&nbsp; ";
+                    echo "<label for='$lowclass'><input type='radio' name='class_alt' id='$lowclass' value='$class[0]'>$class[1]</label>&nbsp;&nbsp; ";
                 }
                 ?>
                 <label for="empty"><input checked="checked" id="empty" name="class_alt" value="" type="radio">(empty)</label>
