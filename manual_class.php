@@ -106,7 +106,7 @@ if (isset($_POST['classify'])) {
 
     $id_next = choose_kide($kysely);
 
-    ohjaa("manual_classification.php?id=$id_next");
+    ohjaa("manual_classification.php?success&id=$id_next");
 } else if (isset($_POST['defaults'])) {
     reset_defaults();
     ohjaa('manual_classification.php');

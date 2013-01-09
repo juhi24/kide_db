@@ -5,6 +5,8 @@ session_start();
 require_once 'apu/kyselyt.php';
 
 $sitearr = array("AAF", "AMF", "NSA", "SGP", "TWP");
+
+//Habit classes
 $classarr = array(
     array("B", "bullet"),
     array("P", "plate"),

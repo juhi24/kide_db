@@ -11,7 +11,8 @@ if (!isset($id)) {
 }
 ?>
 <!DOCTYPE html>
-<html><head>
+<html>
+    <head>
 
         <meta content="text/html; charset=utf-8" http-equiv="content-type">
         <title>Manual classification</title>
@@ -45,7 +46,7 @@ if (!isset($id)) {
                     foreach ($sitearr as $site) {
                         echo "$site<input name=\"site[]\" value=\"$site\" type=\"checkbox\" {$_SESSION["selected_{$site}"]}>&nbsp;&nbsp;&nbsp;";
                     }
-                    
+
                     echo 'Other<input name="site[]" value="other" type="checkbox"><br>';
                     echo "Time frame: From <input type='datetime-local' name='date_start' value='{$_SESSION["man_datestart"]}'>";
                     echo "to <input type='datetime-local' name='date_end' value='{$_SESSION["man_dateend"]}'> <br>";
@@ -88,7 +89,7 @@ if (!isset($id)) {
                 <?php
                 foreach ($classarr as $class) {
                     $lowclass = strtolower($class[0]);
-                    echo "<label for='$lowclass'><input name='class_alt' id='$lowclass' value='$class[0]' type='radio'>$class[1]</label>&nbsp;&nbsp; ";
+                    echo "<label for='$lowclass'><input type='radio' name='class_alt' id='$lowclass' value='$class[0]' accesskey='$class[0]'>$class[1]</label>&nbsp;&nbsp; ";
                 }
                 ?>
                 <label for="empty"><input checked="checked" id="empty" name="class_alt" value="" type="radio">(empty)</label>
@@ -101,6 +102,15 @@ if (!isset($id)) {
             <input type="submit" name="classify" value="Classify">
             <input name="reset" type="reset" value="Reset to latest values">
             <input type="submit" name="defaults" value="Reset to defaults"><br>
-        </form>
+        </form><br>
 
-    </body></html>
+        <p style="background-color: greenyellow; text-align: center;">
+            <?php
+            if (isset($_GET["success"])) {
+                echo 'Particle successfully classified!';
+            }
+            ?>
+        </p>
+
+    </body>
+</html>
