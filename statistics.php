@@ -8,6 +8,7 @@ $count_all = "SELECT COUNT(*) FROM manual_classification
     WHERE classified_by = '{$_SESSION["valid_user"]}'
     ";
 
+//prepare and execute query
 try {
     $kysely = $yhteys->prepare($count_all);
 } catch (PDOException $e) {
@@ -15,7 +16,7 @@ try {
 }
 $kysely->execute();
 $rivi = $kysely->fetch();
-$count_classified = $rivi["count"]
+$count_classified = $rivi["count"] //result
 ?>
 
 <!DOCTYPE html>

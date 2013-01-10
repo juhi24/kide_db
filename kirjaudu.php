@@ -1,7 +1,7 @@
 <?php
 require_once 'apu.php';
 
-if (isset($_GET['sisaan'])) {
+if (isset($_GET['sisaan'])) { //login
     $user=$_POST['user'];
     $pass=$_POST['pass'];
     
@@ -16,7 +16,7 @@ if (isset($_GET['sisaan'])) {
         die("Login incorrect!");
         //ohjaa('login.html');
     }
-} elseif (isset($_GET['ulos'])) {
+} elseif (isset($_GET['ulos'])) { //logout
     session_unset();
     session_destroy();
 } else {

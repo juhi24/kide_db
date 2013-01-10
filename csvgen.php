@@ -2,11 +2,11 @@
 
 require_once 'apu.php';
 
-//Yhteyden muodostus
+//connection
 require_once 'yhteys.php';
 $yhteys = yhdista();
 
-//arvot lomakkeelta
+//values from the form
 $reso = $_POST["resolution"];
 $tunit = $_POST["timeunit"];
 $sizemin = $_POST["size_min"];
@@ -22,12 +22,14 @@ $site_selection = $_POST["site"];
 $sitesql = saittifiltteri($site_selection);
 $qualitysql = "";
 
+//if qualityfilter is checked
 if (!empty($_POST["quality"])) {
     $qualitysql = "AND quality IS NULL OR quality=true";
 }
 
 $count = "";
 
+//SQL to count particles by habit
 foreach ($classarr as $class) {
     $count .= "COUNT(NULLIF(c5nn='$class[0]',FALSE)) AS $class[0], ";
 }
@@ -48,7 +50,7 @@ $qualitysql
 GROUP BY interval
 ORDER BY interval";
 
-//kyselyn suoritus
+//prepare and execute query
 try {
     $kysely = $yhteys->prepare($statement, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
     $kysely->setFetchMode(PDO::FETCH_ASSOC);
@@ -59,7 +61,7 @@ try {
     pdo_error($e);
 }
 
-//tallenna haun tulos csv-tiedostoon
+//save query results to a csv-file
 $file = fopen("output.csv", "w");
 $otsikot = array();
 while ($rivi = $kysely->fetch()) {

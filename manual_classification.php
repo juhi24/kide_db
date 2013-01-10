@@ -79,6 +79,7 @@ if (!isset($id)) {
             <fieldset><legend>Your classification</legend>
                 Particle habit:<br>
                 <?php
+                //generate radio buttons for each habit
                 foreach ($classarr as $class) {
                     echo "<label for='$class[0]'><input type='radio' name='class_primary' id='$class[0]' value='$class[0]' accesskey='$class[0]'>$class[1]</label>&nbsp;&nbsp;";
                 }
@@ -87,6 +88,7 @@ if (!isset($id)) {
                 <br>
                 Alternative habit (optional):<br>
                 <?php
+                //generate radio buttons for secondary habits
                 foreach ($classarr as $class) {
                     $lowclass = strtolower($class[0]);
                     echo "<label for='$lowclass'><input type='radio' name='class_alt' id='$lowclass' value='$class[0]'>$class[1]</label>&nbsp;&nbsp; ";

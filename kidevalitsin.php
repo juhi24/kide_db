@@ -8,6 +8,7 @@ $statement = "SELECT id, class1
     ON ids.id=manual_classification.kide_id
     WHERE class1 IS NULL";
 
+//prepare and execute
 try {
     $kysely = $yhteys->prepare($statement);
 } catch (PDOException $e) {
@@ -17,5 +18,5 @@ try {
 $kysely->setFetchMode(PDO::FETCH_ASSOC);
 $kysely->execute();
 
-$id = choose_kide($kysely);
+$id = choose_kide($kysely); //pick a particle that has an image
 ?>

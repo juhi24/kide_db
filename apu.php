@@ -30,39 +30,43 @@ $default = array(
     "method" => "c5nn"
 );
 
+//location wrapper
 function ohjaa($osoite) {
     header("Location: $osoite");
     exit;
 }
 
+//check if user is logged in
 function on_kirjautunut() {
     return isset($_SESSION["valid_user"]);
 }
 
+//if user not logged in, redirect to login form
 function varmista_kirjautuminen() {
     if (!on_kirjautunut()) {
         ohjaa('login.html');
     }
 }
 
+//generate SQL to filter sites
 function saittifiltteri($sites) {
     $sitesql = "";
-    //Määritellään saittifiltteri.
     if (empty($sites) || $sites[0] === "other") {
-        $sitesql .= "IS NULL"; //mukana vain NULL jos yhtään saittia ei valittuna
+        $sitesql .= "IS NULL"; //if none or only "other" selected
     } else {
         $sitesql.="='$sites[0]'";
         $N = count($sites);
         for ($i = 1; $i < $N; $i++) {
             $sitesql.=" OR site='$sites[$i]'";
             if ($sites[$i] === "other") {
-                $sitesql.=" OR site IS NULL"; //NULL site lasketaan other siteksi
+                $sitesql.=" OR site IS NULL"; //NULL counts as "other"
             }
         }
     }
     return $sitesql;
 }
 
+//initialize or reset session values in forms
 function reset_defaults() {
     global $default;
     $_SESSION["man_sizemin"] = $default["sizemin"];
@@ -81,6 +85,7 @@ function reset_defaults() {
     $_SESSION["selected_any"] = "selected"; //select default value
 }
 
+//clear "selected" elements
 function clear_class_selection() {
     global $classarr;
     $_SESSION["selected_any"] = "";
@@ -89,6 +94,7 @@ function clear_class_selection() {
     }
 }
 
+//pick the first query result particle that has an image
 function choose_kide(PDOStatement $kysely) {
     while ($rivi = $kysely->fetch()) {
         $id = $rivi["id"];
@@ -99,6 +105,7 @@ function choose_kide(PDOStatement $kysely) {
     return $id;
 }
 
+//log pdo errors and show error messages
 function pdo_error(PDOException $e) {
     file_put_contents('PDOErrors.txt', $e->getMessage(), FILE_APPEND);
     die("ERROR: " . $e->getMessage());
