@@ -4,15 +4,14 @@ require_once 'yhteys.php';
 varmista_kirjautuminen();
 $yhteys = yhdista();
 
-$select = "SELECT COUNT(*) FROM manual_classification 
+$count_all = "SELECT COUNT(*) FROM manual_classification 
     WHERE classified_by = '{$_SESSION["valid_user"]}'
     ";
 
 try {
-    $kysely = $yhteys->prepare($select);
+    $kysely = $yhteys->prepare($count_all);
 } catch (PDOException $e) {
-    file_put_contents('PDOErrors.txt', $e->getMessage(), FILE_APPEND);
-    die("ERROR: " . $e->getMessage());
+    pdo_error($e);
 }
 $kysely->execute();
 $rivi = $kysely->fetch();

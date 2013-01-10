@@ -56,8 +56,7 @@ try {
         ':datestart' => $datestart, ':dateend' => $dateend, 'armin' => $armin,
         ':armax' => $armax, ':aspratmin' => $aspratmin, ':aspratmax' => $aspratmax));
 } catch (PDOException $e) {
-    file_put_contents('PDOErrors.txt', $e->getMessage(), FILE_APPEND);
-    die("ERROR: " . $e->getMessage());
+    pdo_error($e);
 }
 
 //tallenna haun tulos csv-tiedostoon
@@ -73,8 +72,8 @@ while ($rivi = $kysely->fetch()) {
 }
 fclose($file);
 
+// Start csv download
 header('Content-type: text/plain');
 header('Content-Disposition: attachment; filename="output.csv"');
-
 readfile('output.csv')
 ?>

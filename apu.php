@@ -16,6 +16,8 @@ $classarr = array(
     array("CA", "column agg."),
     array("RA", "rosette agg."),
     array("I", "irregular"));
+
+//Default values in forms
 $default = array(
     "sizemin" => 0,
     "sizemax" => 9999,
@@ -46,8 +48,8 @@ function varmista_kirjautuminen() {
 function saittifiltteri($sites) {
     $sitesql = "";
     //Määritellään saittifiltteri.
-    if (empty($sites)) {
-        $sitesql = "IS NULL"; //mukana vain NULL jos yhtään saittia ei valittuna
+    if (empty($sites) || $sites[0] === "other") {
+        $sitesql .= "IS NULL"; //mukana vain NULL jos yhtään saittia ei valittuna
     } else {
         $sitesql.="='$sites[0]'";
         $N = count($sites);
@@ -95,6 +97,11 @@ function choose_kide(PDOStatement $kysely) {
         }
     }
     return $id;
+}
+
+function pdo_error(PDOException $e) {
+    file_put_contents('PDOErrors.txt', $e->getMessage(), FILE_APPEND);
+    die("ERROR: " . $e->getMessage());
 }
 
 ?>

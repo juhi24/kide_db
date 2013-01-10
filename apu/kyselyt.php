@@ -12,6 +12,7 @@ class kyselyt {
         try {
         return $this->_pdo->prepare($sqllause);
         } catch (PDOException $e) {
+            file_put_contents('PDOErrors.txt', $e->getMessage(), FILE_APPEND);
             die("ERROR: " . $e->getMessage());
         }
     }
