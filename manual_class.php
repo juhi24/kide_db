@@ -29,13 +29,12 @@ if (isset($_POST['classify'])) {
         $c2_value = "'$c2',";
     }
 
-    $insert = "INSERT INTO manual_classification (kide_id,class1,$c2_label classified_by,quality) VALUES ('$id','$c1',$c2_value'$author',$qstr)";
+    $insert = "INSERT INTO man_class (kide_id,class1,$c2_label classified_by,quality) VALUES ('$id','$c1',$c2_value'$author',$qstr)";
 
     try {
         $insert_kysely = $yhteys->prepare($insert);
     } catch (PDOException $e) {
-        file_put_contents('PDOErrors.txt', $e->getMessage(), FILE_APPEND);
-        die("ERROR: " . $e->getMessage());
+        pdo_error($e);
     }
 //$kysely->execute(array(':id'=>$id,
 //                       ':c1'=>$c1,
@@ -82,8 +81,8 @@ if (isset($_POST['classify'])) {
     }
 
     $select = "SELECT id, class1
-    FROM (SELECT * FROM kide) AS ids LEFT JOIN manual_classification
-    ON ids.id=manual_classification.kide_id
+    FROM (SELECT * FROM kide) AS ids LEFT JOIN man_class
+    ON ids.id=man_class.kide_id
     WHERE class1 IS NULL
     AND dmax BETWEEN :sizemin AND :sizemax
     AND time BETWEEN :datestart AND :dateend

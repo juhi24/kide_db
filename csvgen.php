@@ -24,7 +24,7 @@ $qualitysql = "";
 
 //if qualityfilter is checked
 if (!empty($_POST["quality"])) {
-    $qualitysql = "AND quality IS NULL OR quality=true";
+    $qualitysql = "AND id NOT IN (SELECT kide_id FROM man_class WHERE quality IS NOT NULL OR quality=FALSE)";
 }
 
 $count = "";

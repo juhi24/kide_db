@@ -4,7 +4,7 @@ require_once 'yhteys.php';
 varmista_kirjautuminen();
 $yhteys = yhdista();
 
-$count_all = "SELECT COUNT(*) FROM manual_classification 
+$count_all = "SELECT COUNT(*) FROM man_class
     WHERE classified_by = '{$_SESSION["valid_user"]}'
     ";
 

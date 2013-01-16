@@ -39,7 +39,7 @@ if (!isset($id)) {
             </div>
             <br>
 
-            <fieldset><legend>Select dataset</legend>
+            <fieldset><legend>Select dataset (click to expand/hide)</legend>
                 <div style="display: none">
                     Site(s):&nbsp;&nbsp;&nbsp; 
                     <?php
@@ -53,7 +53,7 @@ if (!isset($id)) {
                     ?>
                 </div>
             </fieldset>
-            <fieldset><legend>Particle properties</legend>
+            <fieldset><legend>Particle properties (click to expand/hide)</legend>
                 <div style="display: none">
                     <?php
                     echo "Maximum diameter between <input maxlength='4' size='5' name='size_min' value='{$_SESSION["man_sizemin"]}' min='0'>um and <input maxlength='4' size='5' name='size_max' value='{$_SESSION["man_sizemax"]}'>um<br>";
@@ -62,7 +62,7 @@ if (!isset($id)) {
                     ?>
                 </div>
             </fieldset>
-            <fieldset><legend>IC-PCA classification</legend>
+            <fieldset><legend>IC-PCA classification (click to expand/hide)</legend>
                 <div style="display: none">
                     Classified as <select name="autoclass">
                         <option value="any" <?php $_SESSION["selected_any"] ?>>any class</option>
