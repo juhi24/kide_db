@@ -27,17 +27,16 @@ if (!empty($_POST["quality"])) {
     $qualitysql = "AND id NOT IN (SELECT kide_id FROM man_class WHERE quality IS NOT NULL OR quality=FALSE)";
 }
 
-$count = "";
-
 //SQL to count particles by habit
+$count = "";
 foreach ($classarr as $class) {
-    $count .= "COUNT(NULLIF(c5nn='$class[0]',FALSE)) AS $class[0], ";
+    $count .= "COUNT(NULLIF(c5nn='$class[0]',FALSE)) AS $class[0]";
 }
 
 $statement = "SELECT
         round_$tunit(time, :reso ) AS interval,
         COUNT(*) AS tot,
-        $count
+        $count, 
         AVG(dmax)::real AS dmax_mean,
         (sum(ar*area(ar,dmax))/sum(area(ar,dmax)))::real AS ar_weighted_mean
 FROM kide
