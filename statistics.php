@@ -4,20 +4,26 @@ require_once 'yhteys.php';
 varmista_kirjautuminen();
 $yhteys = yhdista();
 
+$method = 'c5nn';
+
+//SQL for counting particles
 foreach ($classarr as $class) {
-    $count_match .= SQLmatch_count($class[0]) . " AS $class[0], ";
-    $count_matchrelat .= 'ROUND(' . SQLmatch_count($class[0]) . '/NULLIF(' . SQLparticle_count('c5nn', $class[0]) . ",0)::numeric*100,2) AS $class[0], ";
-    $count_pca .= SQLparticle_count('c5nn', $class[0]) . " AS $class[0], ";
+    $count_match .= SQLmatch_count($method, $class[0]) . " AS $class[0], ";
+    $count_matchrelat .= 'ROUND(' . SQLmatch_count($method, $class[0]) . '/NULLIF(' . SQLparticle_count($method, $class[0]) . ",0)::numeric*100,2) AS $class[0], ";
+    $count_pca .= SQLparticle_count($method, $class[0]) . " AS $class[0], ";
     $count_user1 .= SQLparticle_count('class1', $class[0]) . " AS $class[0], ";
     $count_user2 .= SQLparticle_count('class2', $class[0]) . " AS $class[0], ";
 }
 
+//SELECT
 $select_userclass1 = "SELECT 2 AS row_order, 'user primary classification', $count_user1 COUNT(class1) AS total";
 $select_userclass2 = "SELECT 3 AS row_order, 'user secondary classification', $count_user2 COUNT(class2) AS total";
-$select_matchedclass = "SELECT 4 AS row_order, 'IC-PCA matches with user primary or secondary', $count_match COUNT(NULLIF(c5nn=class1 OR c5nn=class2,FALSE)) AS total";
-$select_matchedrelat = "SELECT 5 AS row_order, 'matched %', $count_matchrelat ROUND(COUNT(NULLIF(c5nn=class1 OR c5nn=class2,FALSE))/COUNT(c5nn)::numeric*100,2) AS total";
-$select_pcaclass = "SELECT 1 AS row_order, 'IC-PCA classification', $count_pca COUNT(c5nn) AS total";
-$from_dataset = "FROM (SELECT id, c5nn FROM kide) AS pca
+$select_matchedclass = "SELECT 4 AS row_order, 'IC-PCA matches with user primary or secondary', $count_match COUNT(NULLIF($method=class1 OR $method=class2,FALSE)) AS total";
+$select_matchedrelat = "SELECT 5 AS row_order, 'matched %', $count_matchrelat ROUND(COUNT(NULLIF($method=class1 OR $method=class2,FALSE))/COUNT($method)::numeric*100,2) AS total";
+$select_pcaclass = "SELECT 1 AS row_order, 'IC-PCA classification', $count_pca COUNT($method) AS total";
+
+//FROM
+$from_dataset = "FROM (SELECT id, $method FROM kide) AS pca
 RIGHT JOIN (SELECT kide_id, class1, class2 FROM man_class WHERE classified_by='{$_SESSION["valid_user"]}') AS usr
 ON pca.id=usr.kide_id";
 
@@ -34,10 +40,12 @@ try {
 }
 $stat_array = $kysely->fetchAll(PDO::FETCH_ASSOC);
 
-function SQLmatch_count($class) {
-    return "COUNT(NULLIF((c5nn=class1 OR c5nn=class2) AND c5nn='$class',FALSE))";
+//SQL to count matched particles by class
+function SQLmatch_count($method, $class) {
+    return "COUNT(NULLIF(($method=class1 OR $method=class2) AND $method='$class',FALSE))";
 }
 
+//SQL to count particles by class
 function SQLparticle_count($ref, $class) {
     return "COUNT(NULLIF($ref='$class',FALSE))";
 }
@@ -78,4 +86,3 @@ function SQLparticle_count($ref, $class) {
         </table>
     </body>
 </html>
-
