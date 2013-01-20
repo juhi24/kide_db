@@ -5,15 +5,17 @@ varmista_kirjautuminen();
 $yhteys = yhdista();
 
 foreach ($classarr as $class) {
-    $count_match .= "COUNT(NULLIF((c5nn=class1 OR c5nn=class2) AND c5nn='$class[0]',FALSE)) AS $class[0], ";
-    $count_pca .= SQLparticle_count('c5nn', $class[0]);
-    $count_user1 .= SQLparticle_count('class1', $class[0]);
-    $count_user2 .= SQLparticle_count('class2', $class[0]);
+    $count_match .= SQLmatch_count($class[0]) . " AS $class[0], ";
+    $count_matchrelat .= 'ROUND(' . SQLmatch_count($class[0]) . '/NULLIF(' . SQLparticle_count('c5nn', $class[0]) . ",0)::numeric*100,2) AS $class[0], ";
+    $count_pca .= SQLparticle_count('c5nn', $class[0]) . " AS $class[0], ";
+    $count_user1 .= SQLparticle_count('class1', $class[0]) . " AS $class[0], ";
+    $count_user2 .= SQLparticle_count('class2', $class[0]) . " AS $class[0], ";
 }
 
 $select_userclass1 = "SELECT 2 AS row_order, 'user primary classification', $count_user1 COUNT(class1) AS total";
 $select_userclass2 = "SELECT 3 AS row_order, 'user secondary classification', $count_user2 COUNT(class2) AS total";
 $select_matchedclass = "SELECT 4 AS row_order, 'IC-PCA matches with user primary or secondary', $count_match COUNT(NULLIF(c5nn=class1 OR c5nn=class2,FALSE)) AS total";
+$select_matchedrelat = "SELECT 5 AS row_order, 'matched %', $count_matchrelat ROUND(COUNT(NULLIF(c5nn=class1 OR c5nn=class2,FALSE))/COUNT(c5nn)::numeric*100,2) AS total";
 $select_pcaclass = "SELECT 1 AS row_order, 'IC-PCA classification', $count_pca COUNT(c5nn) AS total";
 $from_dataset = "FROM (SELECT id, c5nn FROM kide) AS pca
 RIGHT JOIN (SELECT kide_id, class1, class2 FROM man_class WHERE classified_by='{$_SESSION["valid_user"]}') AS usr
@@ -21,22 +23,30 @@ ON pca.id=usr.kide_id";
 
 //prepare and execute query
 try {
-    $kysely = $yhteys->prepare("SELECT * FROM ($select_pcaclass $from_dataset UNION $select_matchedclass $from_dataset UNION $select_userclass1 $from_dataset UNION $select_userclass2 $from_dataset) AS A ORDER BY row_order");
+    $kysely = $yhteys->prepare("SELECT * FROM ($select_pcaclass $from_dataset 
+        UNION $select_matchedclass $from_dataset 
+            UNION $select_userclass1 $from_dataset 
+                UNION $select_userclass2 $from_dataset 
+                    UNION $select_matchedrelat $from_dataset) AS A ORDER BY row_order");
     $kysely->execute();
 } catch (PDOException $e) {
     pdo_error($e);
 }
 $stat_array = $kysely->fetchAll(PDO::FETCH_ASSOC);
 
-function SQLparticle_count ($ref, $class) {
-    return "COUNT(NULLIF($ref='$class',FALSE)) AS $class, ";
+function SQLmatch_count($class) {
+    return "COUNT(NULLIF((c5nn=class1 OR c5nn=class2) AND c5nn='$class',FALSE))";
+}
+
+function SQLparticle_count($ref, $class) {
+    return "COUNT(NULLIF($ref='$class',FALSE))";
 }
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-        
+
         <style>
             .hide1 tr *:nth-child(1) {
                 display: none;
