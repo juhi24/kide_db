@@ -4,6 +4,7 @@ session_start();
 
 require_once 'apu/kyselyt.php';
 
+//Measurement sites
 $sitearr = array("AAF", "AMF", "NSA", "SGP", "TWP");
 
 //Habit classes
@@ -15,7 +16,18 @@ $classarr = array(
     array("PA", "plate agg."),
     array("CA", "column agg."),
     array("RA", "rosette agg."),
-    array("I", "irregular"));
+    array("I", "irregular")
+);
+
+//IC-PCA methods
+$methodarr = array(
+    array('nw3nn', 'no weight 3 nearest neighbours'),
+    array('nw5nn', 'no weight 5 nearest neighbours'),
+    array('c1nn', 'nearest neighbour'),
+    array('c3nn', '3 nearest neighbours'),
+    array('c5nn', '5 nearest neighbours'),
+    array('bayes', 'bayesian')
+);
 
 //Default values in forms
 $default = array(

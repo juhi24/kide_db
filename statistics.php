@@ -4,28 +4,33 @@ require_once 'yhteys.php';
 varmista_kirjautuminen();
 $yhteys = yhdista();
 
-$ref='c5nn';
-$count_user="";
-$count_pca="";
 foreach ($classarr as $class) {
-    $count_user .= "COUNT(NULLIF((c5nn=class1 OR c5nn=class2) AND $ref='$class[0]',FALSE)) AS $class[0], ";
-    $count_pca .= "COUNT(NULLIF($ref='$class[0]',FALSE)) AS $class[0], ";
+    $count_match .= "COUNT(NULLIF((c5nn=class1 OR c5nn=class2) AND c5nn='$class[0]',FALSE)) AS $class[0], ";
+    $count_pca .= SQLparticle_count('c5nn', $class[0]);
+    $count_user1 .= SQLparticle_count('class1', $class[0]);
+    $count_user2 .= SQLparticle_count('class2', $class[0]);
 }
 
-$select_userdata = "SELECT 2 AS row_order, 'matched with IC-PCA classification', $count_user COUNT(NULLIF(c5nn=class1 OR c5nn=class2,FALSE)) AS total";
-$select_pcadata = "SELECT 1 AS row_order, 'particles classified', $count_pca COUNT(*) AS total";
+$select_userclass1 = "SELECT 2 AS row_order, 'user primary classification', $count_user1 COUNT(class1) AS total";
+$select_userclass2 = "SELECT 3 AS row_order, 'user secondary classification', $count_user2 COUNT(class2) AS total";
+$select_matchedclass = "SELECT 4 AS row_order, 'IC-PCA matches with user primary or secondary', $count_match COUNT(NULLIF(c5nn=class1 OR c5nn=class2,FALSE)) AS total";
+$select_pcaclass = "SELECT 1 AS row_order, 'IC-PCA classification', $count_pca COUNT(c5nn) AS total";
 $from_dataset = "FROM (SELECT id, c5nn FROM kide) AS pca
 RIGHT JOIN (SELECT kide_id, class1, class2 FROM man_class WHERE classified_by='{$_SESSION["valid_user"]}') AS usr
 ON pca.id=usr.kide_id";
 
 //prepare and execute query
 try {
-    $kysely = $yhteys->prepare("SELECT * FROM ($select_pcadata $from_dataset UNION $select_userdata $from_dataset) AS A ORDER BY row_order");
+    $kysely = $yhteys->prepare("SELECT * FROM ($select_pcaclass $from_dataset UNION $select_matchedclass $from_dataset UNION $select_userclass1 $from_dataset UNION $select_userclass2 $from_dataset) AS A ORDER BY row_order");
     $kysely->execute();
 } catch (PDOException $e) {
     pdo_error($e);
 }
 $stat_array = $kysely->fetchAll(PDO::FETCH_ASSOC);
+
+function SQLparticle_count ($ref, $class) {
+    return "COUNT(NULLIF($ref='$class',FALSE)) AS $class, ";
+}
 ?>
 
 <!DOCTYPE html>
