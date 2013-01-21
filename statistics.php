@@ -39,16 +39,6 @@ try {
     pdo_error($e);
 }
 $stat_array = $kysely->fetchAll(PDO::FETCH_ASSOC);
-
-//SQL to count matched particles by class
-function SQLmatch_count($method, $class) {
-    return "COUNT(NULLIF(($method=class1 OR $method=class2) AND $method='$class',FALSE))";
-}
-
-//SQL to count particles by class
-function SQLparticle_count($ref, $class) {
-    return "COUNT(NULLIF($ref='$class',FALSE))";
-}
 ?>
 
 <!DOCTYPE html>

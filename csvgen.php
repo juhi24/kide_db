@@ -28,15 +28,14 @@ if (!empty($_POST["quality"])) {
 }
 
 //SQL to count particles by habit
-$count = "";
 foreach ($classarr as $class) {
-    $count .= "COUNT(NULLIF(c5nn='$class[0]',FALSE)) AS $class[0]";
+    $count .= SQLparticle_count('c5nn', $class[0]) . " AS $class[0], ";
 }
 
 $statement = "SELECT
         round_$tunit(time, :reso ) AS interval,
         COUNT(*) AS tot,
-        $count, 
+        $count
         AVG(dmax)::real AS dmax_mean,
         (sum(ar*area(ar,dmax))/sum(area(ar,dmax)))::real AS ar_weighted_mean
 FROM kide
