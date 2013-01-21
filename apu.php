@@ -88,6 +88,21 @@ function SQLparticle_count($ref, $class) {
     return "COUNT(NULLIF($ref='$class',FALSE))";
 }
 
+//HTML field for dmax
+function HTMLdmax ($min, $max) {
+    return "Maximum diameter between <input maxlength='4' size='5' name='size_min' value='$min' min='0'>um and <input maxlength='4' size='5' name='size_max' value='$max'>um<br>";
+}
+
+//HTML field for ar
+function HTMLar ($min, $max) {
+    return "Area ratio between <input maxlength='4' size='5' name='ar_min' value='$min'> and <input maxlength='4' size='5' name='ar_max' value='$max'><br>";
+}
+
+//HTML field for asprat
+function HTMLasprat ($min, $max) {
+    return "Aspect ratio between <input maxlength='4' size='5' name='asprat_min' value='$min'> and <input maxlength='4' size='5' name='asprat_max' value='$max'><br>";
+}
+
 //initialize or reset session values in forms
 function reset_defaults() {
     global $default;

@@ -56,9 +56,9 @@ if (!isset($id)) {
             <fieldset><legend>Particle properties (click to expand/hide)</legend>
                 <div style="display: none">
                     <?php
-                    echo "Maximum diameter between <input maxlength='4' size='5' name='size_min' value='{$_SESSION["man_sizemin"]}' min='0'>um and <input maxlength='4' size='5' name='size_max' value='{$_SESSION["man_sizemax"]}'>um<br>";
-                    echo "Area ratio between <input maxlength='4' size='5' name='ar_min' value='{$_SESSION["man_armin"]}'> and <input maxlength='4' size='5' name='ar_max' value='{$_SESSION["man_armax"]}'><br>";
-                    echo "Aspect ratio between <input maxlength='4' size='5' name='asprat_min' value='{$_SESSION["man_aspratmin"]}'> and <input maxlength='4' size='5' name='asprat_max' value='{$_SESSION["man_aspratmax"]}'><br>";
+                    echo HTMLdmax($_SESSION['man_sizemin'],$_SESSION['man_sizemax']);
+                    echo HTMLar($_SESSION["man_armin"], $_SESSION["man_armax"]);
+                    echo HTMLasprat($_SESSION["man_aspratmin"], $_SESSION["man_aspratmax"]);
                     ?>
                 </div>
             </fieldset>

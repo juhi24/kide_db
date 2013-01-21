@@ -60,7 +60,7 @@ $stat_array = $kysely->fetchAll(PDO::FETCH_ASSOC);
         <h3>Manual classification results</h3>
         <table class="hide1" border="1">
             <?php
-            echo '<tr><td></td><td style="visibility:collapse;"></td>';
+            echo '<tr><td></td><td></td>';
             foreach ($classarr as $class) {
                 echo "<td>$class[1]</td>";
             }

@@ -46,9 +46,9 @@ varmista_kirjautuminen();
             <br>
             <fieldset><legend>Particle properties</legend>
                 <?php
-                echo "Maximum diameter between <input maxlength='4' size='5' name='size_min' value='{$default["sizemin"]}' min='0'>um and <input maxlength='4' size='5' name='size_max' value='{$default["sizemax"]}'>um<br>";
-                echo "Area ratio between <input maxlength='4' size='5' name='ar_min' value='{$default["armin"]}'> and <input maxlength='4' size='5' name='ar_max' value='{$default["armax"]}'><br>";
-                echo "Aspect ratio between <input maxlength='4' size='5' name='asprat_min' value='{$default["aspratmin"]}'> and <input maxlength='4' size='5' name='asprat_max' value='{$default["aspratmax"]}'><br>";
+                echo HTMLdmax($default['sizemin'], $default['sizemax']);
+                echo HTMLar($default['armin'], $default['armax']);
+                echo HTMLasprat($default['aspratmin'], $default['aspratmax']);
                 ?>
             </fieldset>
 

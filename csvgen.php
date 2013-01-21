@@ -6,6 +6,8 @@ require_once 'apu.php';
 require_once 'yhteys.php';
 $yhteys = yhdista();
 
+$pca_method = 'c5nn';
+
 //values from the form
 $reso = $_POST["resolution"];
 $tunit = $_POST["timeunit"];
@@ -29,7 +31,7 @@ if (!empty($_POST["quality"])) {
 
 //SQL to count particles by habit
 foreach ($classarr as $class) {
-    $count .= SQLparticle_count('c5nn', $class[0]) . " AS $class[0], ";
+    $count .= SQLparticle_count($pca_method, $class[0]) . " AS $class[0], ";
 }
 
 $statement = "SELECT
