@@ -63,15 +63,20 @@ if (isset($_POST['classify'])) {
     $_SESSION["man_aspratmax"] = $aspratmax;
     $_SESSION["man_datestart"] = $datestart;
     $_SESSION["man_dateend"] = $dateend;
-    $_SESSION["man_sites"] = $site_selection;
-    $_SESSION["man_autoclass"] = $autoclass;
-    $_SESSION["man_method"] = $method;
+    //$_SESSION["man_sites"] = $site_selection;
+    //$_SESSION["man_autoclass"] = $autoclass;
+    //$_SESSION["man_method"] = $method;
 
-//clear old value
-    clear_class_selection();
+//clear old values
+    clear_selection($classarr, 'any');
+    clear_selection($sitearr, 'other');
 
-//set new value
+//set new values
+    print_r($site_selection);
     $_SESSION["selected_$autoclass"] = "selected";
+    foreach ($site_selection as $site) {
+        $_SESSION["selected_$site"] = "selected";
+    }
 
     $sitesql = saittifiltteri($site_selection);
     $methodsql = "";

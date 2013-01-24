@@ -88,24 +88,37 @@ function SQLparticle_count($ref, $class) {
     return "COUNT(NULLIF($ref='$class',FALSE))";
 }
 
+function HTMLsite($remember_selection) {
+    global $sitearr;
+    foreach ($sitearr as $site) {
+        $siteboxes .= "$site<input name='site[]' value='$site' type='checkbox' ";
+        if ($remember_selection) {
+            $siteboxes .= $_SESSION["selected_$site"];
+        }
+        $siteboxes .= '>&nbsp;&nbsp;&nbsp;';
+    }
+    $siteboxes .= 'Other<input name="site[]" value="other" type="checkbox"><br>';
+    return $siteboxes;
+}
+
 //HTML field for dmax
-function HTMLdmax ($min, $max) {
+function HTMLdmax($min, $max) {
     return "Maximum diameter between <input maxlength='4' size='5' name='size_min' value='$min' min='0'>um and <input maxlength='4' size='5' name='size_max' value='$max'>um<br>";
 }
 
 //HTML field for ar
-function HTMLar ($min, $max) {
+function HTMLar($min, $max) {
     return "Area ratio between <input maxlength='4' size='5' name='ar_min' value='$min'> and <input maxlength='4' size='5' name='ar_max' value='$max'><br>";
 }
 
 //HTML field for asprat
-function HTMLasprat ($min, $max) {
+function HTMLasprat($min, $max) {
     return "Aspect ratio between <input maxlength='4' size='5' name='asprat_min' value='$min'> and <input maxlength='4' size='5' name='asprat_max' value='$max'><br>";
 }
 
 //initialize or reset session values in forms
 function reset_defaults() {
-    global $default;
+    global $default, $classarr;
     $_SESSION["man_sizemin"] = $default["sizemin"];
     $_SESSION["man_sizemax"] = $default["sizemax"];
     $_SESSION["man_armin"] = $default["armin"];
@@ -116,18 +129,17 @@ function reset_defaults() {
     $_SESSION["man_dateend"] = $default["dateend"];
     unset($_SESSION["man_sites"]);
     unset($_SESSION["man_autoclass"]);
-    $_SESSION["man_method"] = $default["method"];
+    //$_SESSION["man_method"] = $default["method"];
 
-    clear_class_selection(); //clear class selection
+    clear_selection($classarr, 'any'); //clear class selection
     $_SESSION["selected_any"] = "selected"; //select default value
 }
 
 //clear "selected" elements
-function clear_class_selection() {
-    global $classarr;
-    $_SESSION["selected_any"] = "";
-    foreach ($classarr as $class) {
-        $_SESSION["selected_$class[0]"] = "";
+function clear_selection($optionsarr, $extra_option) {
+    $_SESSION["selected_$extra_option"] = "";
+    foreach ($optionsarr as $option) {
+        $_SESSION["selected_$option"] = "";
     }
 }
 

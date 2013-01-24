@@ -43,11 +43,7 @@ if (!isset($id)) {
                 <div style="display: none">
                     Site(s):&nbsp;&nbsp;&nbsp; 
                     <?php
-                    foreach ($sitearr as $site) {
-                        echo "$site<input name=\"site[]\" value=\"$site\" type=\"checkbox\" {$_SESSION["selected_{$site}"]}>&nbsp;&nbsp;&nbsp;";
-                    }
-
-                    echo 'Other<input name="site[]" value="other" type="checkbox"><br>';
+                    echo HTMLsite(TRUE);
                     echo "Time frame: From <input type='datetime-local' name='date_start' value='{$_SESSION["man_datestart"]}'>";
                     echo "to <input type='datetime-local' name='date_end' value='{$_SESSION["man_dateend"]}'> <br>";
                     ?>
