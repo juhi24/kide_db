@@ -18,9 +18,8 @@ varmista_kirjautuminen();
             <fieldset><legend>Select dataset</legend>
                 Site(s):&nbsp;&nbsp;&nbsp; 
                 <?php
-                echo HTMLsite('');
-                echo "Time frame: From <input type='datetime-local' name='date_start' value='{$default["datestart"]}'>";
-                echo "to <input type='datetime-local' name='date_end' value='{$default["dateend"]}'> <br>";
+                echo HTMLsite(FALSE);
+                echo HTMLdate($default["datestart"],$default["dateend"]);
                 ?>
             </fieldset>
             <br>

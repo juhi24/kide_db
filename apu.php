@@ -88,6 +88,7 @@ function SQLparticle_count($ref, $class) {
     return "COUNT(NULLIF($ref='$class',FALSE))";
 }
 
+//HTML measurement site selector boxes
 function HTMLsite($remember_selection) {
     global $sitearr;
     foreach ($sitearr as $site) {
@@ -99,6 +100,11 @@ function HTMLsite($remember_selection) {
     }
     $siteboxes .= 'Other<input name="site[]" value="other" type="checkbox"><br>';
     return $siteboxes;
+}
+
+//HTML date fields
+function HTMLdate($start, $end) {
+    return "Time frame: From <input type='datetime-local' name='date_start' value='$start'> to <input type='datetime-local' name='date_end' value='$end'> <br>";
 }
 
 //HTML field for dmax

@@ -44,8 +44,7 @@ if (!isset($id)) {
                     Site(s):&nbsp;&nbsp;&nbsp; 
                     <?php
                     echo HTMLsite(TRUE);
-                    echo "Time frame: From <input type='datetime-local' name='date_start' value='{$_SESSION["man_datestart"]}'>";
-                    echo "to <input type='datetime-local' name='date_end' value='{$_SESSION["man_dateend"]}'> <br>";
+                    echo HTMLdate($_SESSION["man_datestart"], $_SESSION["man_dateend"]);
                     ?>
                 </div>
             </fieldset>
