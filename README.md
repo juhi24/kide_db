@@ -5,5 +5,5 @@ Further documentation can be found in the [doc directory](doc/README.md).
 
 ## Tietokantasovellus-kurssin dokumentaatio
 
-*[Suunnitteludokumentti](doc/Suunnitteludokumentti.pdf)
-*[Toteutusdokumentti](doc/Toteutusdokumentti.pdf)
+* [Suunnitteludokumentti](doc/Suunnitteludokumentti.pdf)
+* [Toteutusdokumentti](doc/Toteutusdokumentti.pdf)
