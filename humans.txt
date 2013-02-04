@@ -3,13 +3,14 @@
 
 # TEAM
 
-    <name> -- <role> -- <twitter>
+    Jussi Tiira
+    Vesa Ylhäinen
 
 # THANKS
 
-    <name>
+    Helsinki University
 
 # TECHNOLOGY COLOPHON
 
     HTML5, CSS3
-    jQuery, Modernizr
+    PHP, jQuery
