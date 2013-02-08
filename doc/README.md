@@ -54,4 +54,4 @@ In the future the page will allow filtering the results ie. by particle properti
 ##Request more data
 The system currently has very limited amount of data in it's database. If you want more data available, 
 please send IC-PCA input data (particle image files) to jussi.tiira@helsinki.fi and I'll add them to the system. 
-Also please tell if you want the particle images available for manual classification or only the IC-PCA results imported.
+Also please tell if you want the particle images available for manual classification or only the IC-PCA results imported to the system.
