@@ -48,5 +48,5 @@ Example: Manually classify particles that were automatically classified as colum
 6. The next particle shown will match your selection. Repeat steps 4 and 5 to classify more particles that IC-PCA thinks are column aggregates.
 
 ###User statistics
-On this page you can see how well IC-PCA performed on the particles that you have manually classified. 
-In the future the page will allow filtering the results ie. by particle properties.
+On this page you can see how well IC-PCA performed on the particles that you have manually classified.
+In the future the page will allow filtering the results ie. by particle properties, and comparison to manual classification done by other users.
