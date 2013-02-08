@@ -26,7 +26,7 @@ You can filter the results by measurement place, time and particle properties.
 Example: We want habit distributions of particles larger than 200um from 2010-12-20 on two minute intervals.
 
 1. Navigate to CSV-generator page
-1. Set time frame from 2010-12-20 t0 2010-12-21
+1. Set time frame from 2010-12-20 to 2010-12-21
 2. Set time resolution to 2 minutes
 3. Set maximum diameter between 200um and 9999um
 4. Click submit (or hit enter). Your download should start immediately.
