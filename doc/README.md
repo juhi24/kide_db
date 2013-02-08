@@ -20,7 +20,7 @@ The navigation links are listed in the page header.
 ##Usage
 
 ###CSV-generator
-Here you can download CSV summations of habit distributions classified by IC-PCA. 
+Here you can download CSV-formatted summations of habit distributions classified by IC-PCA. 
 You can filter the results by measurement place, time and particle properties.
 
 Example: We want habit distributions of particles larger than 200um from 2010-12-20 on two minute intervals.
