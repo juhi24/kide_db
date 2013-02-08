@@ -50,3 +50,8 @@ Example: Manually classify particles that were automatically classified as colum
 ###User statistics
 On this page you can see how well IC-PCA performed on the particles that you have manually classified.
 In the future the page will allow filtering the results ie. by particle properties, and comparison to manual classification done by other users.
+
+##Request more data
+The system currently has very limited amount of data in it's database. If you want more data available, 
+please send IC-PCA input data (particle image files) to jussi.tiira@helsinki.fi and I'll add them to the system. 
+Also please tell if you want the particle images available for manual classification or only the IC-PCA results imported.
