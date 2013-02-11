@@ -45,11 +45,7 @@ $stat_array = $kysely->fetchAll(PDO::FETCH_ASSOC);
 <html>
     <head>
 
-        <style>
-            .hide1 tr *:nth-child(1) {
-                display: none;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="css/global.css">
 
         <meta content="text/html; charset=utf-8" http-equiv="content-type">
         <title>Statistics</title>
@@ -58,7 +54,7 @@ $stat_array = $kysely->fetchAll(PDO::FETCH_ASSOC);
         <?php require_once 'apu/header.html'; ?>
         <h2>Statistics</h2>
         <h3>Manual classification results</h3>
-        <table class="hide1" border="1">
+        <table class="hide1">
             <?php
             echo '<tr><td></td><td></td>';
             foreach ($classarr as $class) {

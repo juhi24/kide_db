@@ -1,0 +1,19 @@
+/* 
+    Document   : global
+    Created on : 11.2.2013, 21:48:04
+    Author     : jussi24
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+.hide1 tr *:nth-child(1) {
+    display: none;
+}
+
+table, th, td { 
+    border: 1px solid black;
+}

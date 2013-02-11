@@ -122,6 +122,18 @@ function HTMLasprat($min, $max) {
     return "Aspect ratio between <input maxlength='4' size='5' name='asprat_min' value='$min'> and <input maxlength='4' size='5' name='asprat_max' value='$max'><br>";
 }
 
+function printSimpleTable($array2d) {
+    echo '<table>';
+    foreach ($array2d as $rows => $row) {
+                echo '<tr>';
+                foreach ($row as $col => $cell) {
+                    echo "<td>$cell</td>";
+                }
+                echo '</tr>';
+            }
+    echo '</table>';
+}
+
 //initialize or reset session values in forms
 function reset_defaults() {
     global $default, $classarr;
