@@ -3,7 +3,6 @@
 require_once 'apu.php';
 
 //connection
-require_once 'yhteys.php';
 $yhteys = yhdista();
 
 $pca_method = 'c5nn';

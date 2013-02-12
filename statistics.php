@@ -1,6 +1,5 @@
 <?php
 require_once 'apu.php';
-require_once 'yhteys.php';
 varmista_kirjautuminen();
 $yhteys = yhdista();
 

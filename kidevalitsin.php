@@ -1,6 +1,5 @@
 <?php
 require_once 'apu.php';
-require_once 'yhteys.php';
 $yhteys = yhdista();
 
 $statement = "SELECT id, class1

@@ -3,6 +3,7 @@
 session_start();
 
 require_once 'apu/kyselyt.php';
+require_once 'yhteys.php';
 
 //Measurement sites
 $sitearr = array("AAF", "AMF", "NSA", "SGP", "TWP");
@@ -122,15 +123,19 @@ function HTMLasprat($min, $max) {
     return "Aspect ratio between <input maxlength='4' size='5' name='asprat_min' value='$min'> and <input maxlength='4' size='5' name='asprat_max' value='$max'><br>";
 }
 
-function printSimpleTable($array2d) {
+function HTMLparticleimg($id) {
+    return "<img alt='$id' src='img/kide/$id.jpg'>";
+}
+
+function print_simple_table($array2d) {
     echo '<table>';
     foreach ($array2d as $rows => $row) {
-                echo '<tr>';
-                foreach ($row as $col => $cell) {
-                    echo "<td>$cell</td>";
-                }
-                echo '</tr>';
-            }
+        echo '<tr>';
+        foreach ($row as $col => $cell) {
+            echo "<td>$cell</td>";
+        }
+        echo '</tr>';
+    }
     echo '</table>';
 }
 
@@ -176,6 +181,28 @@ function choose_kide(PDOStatement $kysely) {
 function pdo_error(PDOException $e) {
     file_put_contents('PDOErrors.txt', $e->getMessage(), FILE_APPEND);
     die("ERROR: " . $e->getMessage());
+}
+
+function pdo_select($selectsql) {
+    $yhteys = yhdista();
+    try {
+        $query = $yhteys->prepare($selectsql);
+        $query->execute();
+    } catch (PDOException $e) {
+        pdo_error($e);
+    }
+    return $query;
+}
+
+function fetchAll_with_headers($query) {
+    $arr = array();
+    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+        if (empty($arr)) {
+            $arr[0] = array_keys($row);
+        }
+        $arr[] = $row;
+    }
+    return $arr;
 }
 
 ?>

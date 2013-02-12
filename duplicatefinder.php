@@ -1,28 +1,33 @@
 <?php
 require_once 'apu.php';
-require_once 'yhteys.php';
 varmista_kirjautuminen();
-$yhteys = yhdista();
+//$yhteys = yhdista();
 
-$dmax = "ROUND(dmax::numeric,0)";
-$ar = "ROUND(ar::numeric,1)";
-$asprat = "ROUND(asprat::numeric,1)";
-$attribs = "$dmax, $ar, $asprat, n_corners";
+$showresults = true;
+if (isset($_GET['results'])) {
+    $dmax = "ROUND(dmax::numeric,{$_POST['dec_dmax']})";
+    $ar = "ROUND(ar::numeric,{$_POST['dec_ar']})";
+    $asprat = "ROUND(asprat::numeric,{$_POST['dec_asprat']})";
+    $attribs = "$dmax, $ar, $asprat, n_corners";
 
-$sql = "SELECT $dmax AS size, $ar AS arearatio, $asprat AS asprat, n_corners, COUNT(*)
-FROM kide
-GROUP BY $attribs
-HAVING (COUNT($dmax)>1 AND COUNT(n_corners)>1 AND COUNT($ar)>1 AND COUNT($asprat)>1)
-ORDER BY $dmax";
+    $sql = "SELECT $dmax AS size, $ar AS arearatio, $asprat AS aspratio, n_corners, COUNT(*) AS particle_count
+    FROM kide
+    GROUP BY $attribs
+    HAVING (COUNT($dmax)>1 AND COUNT(n_corners)>1 AND COUNT($ar)>1 AND COUNT($asprat)>1)
+    ORDER BY $dmax";
 
-try {
-    $query = $yhteys->prepare($sql);
-    $query->execute();
-} catch (PDOException $e) {
-    pdo_error($e);
+    $query = pdo_select($sql);
+
+    $duplicates = fetchAll_with_headers($query);
+
+    if (count($duplicates) > 50) {
+        $showresults = false;
+        $message = 'Found too many results. Please change the search conditions.';
+    } elseif (empty($duplicates)) {
+        $showresults = false;
+        $message = 'No results.';
+    }
 }
-
-$duplicates_array = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -32,8 +37,61 @@ $duplicates_array = $query->fetchAll(PDO::FETCH_ASSOC);
         <title>Duplicate finder</title>
     </head>
     <body>
+        <?php require_once 'apu/header.html'; ?>
+        <h2>Find duplicates</h2>
+        <h3>Settings</h3>
+        <form method="post" action="duplicatefinder.php?results" name="findersettings">
+            <h4>Number of decimals</h4>
+            <ul>
+                <li>maximum diameter:
+                    <select name="dec_dmax">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select> decimals</li>
+                <li>area ratio:
+                    <select name="dec_ar">
+                        <option value="1">1</option>
+                        <option value="2" selected>2</option>
+                        <option value="3">3</option>
+                    </select> decimals</li>
+                <li>aspect ratio:
+                    <select name="dec_asprat">
+                        <option value="0">0</option>
+                        <option value="1" selected>1</option>
+                        <option value="2">2</option>
+                    </select> decimals</li>
+            </ul>
+            <input type="submit" value="Search duplicates">
+        </form>
+
         <?php
-        printSimpleTable($duplicates_array);
+        if (isset($_GET['results']) && $showresults) {
+            echo '<h3>Results overview</h3>';
+
+            print_simple_table($duplicates);
+            echo '<h3>Possible duplicates</h3>';
+            foreach (array_slice($duplicates, 1) as $dupgroups => $dupgroup) {
+                $selectid = "SELECT time, id FROM kide 
+                WHERE $dmax = {$dupgroup['size']} AND $ar = {$dupgroup['arearatio']} AND $asprat = {$dupgroup['aspratio']}
+                ORDER BY time";
+
+                $duplicateids = fetchAll_with_headers(pdo_select($selectid));
+
+                $isFirst = true;
+                foreach ($duplicateids as $rows => $row) {
+                    if ($isFirst) {
+                        $isFirst = false;
+                        $duplicateids[$rows][] = "image";
+                        continue;
+                    }
+                    $duplicateids[$rows][] = HTMLparticleimg($row['id']);
+                }
+                print_simple_table($duplicateids);
+            }
+        } elseif (!$showresults) {
+            echo "<h3>Results overview</h3><p>$message</p>";
+        }
         ?>
     </body>
 </html>
