@@ -44,16 +44,16 @@ if (!isset($id)) {
                     Site(s):&nbsp;&nbsp;&nbsp; 
                     <?php
                     echo HTMLsite(TRUE);
-                    echo HTMLdate($_SESSION["man_datestart"], $_SESSION["man_dateend"]);
+                    echo HTMLdate($_SESSION["datestart"], $_SESSION["dateend"]);
                     ?>
                 </div>
             </fieldset>
             <fieldset><legend>Particle properties (click to expand/hide)</legend>
                 <div style="display: none">
                     <?php
-                    echo HTMLdmax($_SESSION['man_sizemin'],$_SESSION['man_sizemax']);
-                    echo HTMLar($_SESSION["man_armin"], $_SESSION["man_armax"]);
-                    echo HTMLasprat($_SESSION["man_aspratmin"], $_SESSION["man_aspratmax"]);
+                    echo HTMLdmax($_SESSION['sizemin'],$_SESSION['sizemax']);
+                    echo HTMLar($_SESSION["armin"], $_SESSION["armax"]);
+                    echo HTMLasprat($_SESSION["aspratmin"], $_SESSION["aspratmax"]);
                     ?>
                 </div>
             </fieldset>

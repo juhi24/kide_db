@@ -11,7 +11,7 @@ if (isset($_GET['sisaan'])) { //login
     $kayttaja = $kyselija->tunnista($user, $pass);
     if ($kayttaja) {
         $_SESSION["valid_user"]=$kayttaja->username;
-        reset_defaults();
+        reset_defaults(); //initialize session based values in forms
     } else {
         die("Login incorrect!");
         //ohjaa('login.html');

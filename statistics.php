@@ -1,4 +1,5 @@
 <?php
+require_once 'lib/phplot.php';
 require_once 'apu.php';
 varmista_kirjautuminen();
 $yhteys = yhdista();
@@ -45,6 +46,14 @@ if (isset($_GET['results'])) {
         pdo_error($e);
     }
     $stat_array = $kysely->fetchAll(PDO::FETCH_ASSOC);
+    
+    //save new values to session
+    $_SESSION["sizemin"] = $_POST["size_min"];
+    $_SESSION["sizemax"] = $_POST["size_max"];
+    $_SESSION["armin"] = $_POST["ar_min"];
+    $_SESSION["armax"] = $_POST["ar_max"];
+    $_SESSION["aspratmin"] = $_POST["asprat_min"];
+    $_SESSION["aspratmax"] = $_POST["asprat_max"];
 }
 ?>
 
@@ -64,9 +73,9 @@ if (isset($_GET['results'])) {
         <form name="getstats" method="post" action="statistics.php?results">
             <fieldset><legend>Particle properties</legend>
                 <?php
-                echo HTMLdmax($default['sizemin'], $default['sizemax']);
-                echo HTMLar($default['armin'], $default['armax']);
-                echo HTMLasprat($default['aspratmin'], $default['aspratmax']);
+                echo HTMLdmax($_SESSION['sizemin'], $_SESSION['sizemax']);
+                echo HTMLar($_SESSION['armin'], $_SESSION['armax']);
+                echo HTMLasprat($_SESSION['aspratmin'], $_SESSION['aspratmax']);
                 ?>
             </fieldset>
             <input type="submit" name="submit" value="Generate statistics">
@@ -89,7 +98,19 @@ if (isset($_GET['results'])) {
                 echo '</tr>';
             }
             echo '</table>';
+            
+            //print_r($stat_array);
+            
+            $plotdata = array();
+            foreach ($classarr as $i => $class) {
+                $plotdata[] = array($class[0], $stat_array[4][strtolower($class[0])]);
+            }
+            $plotdata[] = array('TOTAL', $stat_array[4]['total']);
+            $_SESSION['statplot'] = $plotdata;
+            
+            //echo '<img src="graphs/statplot.php">';
         }
         ?>
+        
     </body>
 </html>

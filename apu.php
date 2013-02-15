@@ -142,17 +142,17 @@ function print_simple_table($array2d) {
 //initialize or reset session values in forms
 function reset_defaults() {
     global $default, $classarr;
-    $_SESSION["man_sizemin"] = $default["sizemin"];
-    $_SESSION["man_sizemax"] = $default["sizemax"];
-    $_SESSION["man_armin"] = $default["armin"];
-    $_SESSION["man_armax"] = $default["armax"];
-    $_SESSION["man_aspratmin"] = $default["aspratmin"];
-    $_SESSION["man_aspratmax"] = $default["aspratmax"];
-    $_SESSION["man_datestart"] = $default["datestart"];
-    $_SESSION["man_dateend"] = $default["dateend"];
-    unset($_SESSION["man_sites"]);
-    unset($_SESSION["man_autoclass"]);
-    //$_SESSION["man_method"] = $default["method"];
+    $_SESSION["sizemin"] = $default["sizemin"];
+    $_SESSION["sizemax"] = $default["sizemax"];
+    $_SESSION["armin"] = $default["armin"];
+    $_SESSION["armax"] = $default["armax"];
+    $_SESSION["aspratmin"] = $default["aspratmin"];
+    $_SESSION["aspratmax"] = $default["aspratmax"];
+    $_SESSION["datestart"] = $default["datestart"];
+    $_SESSION["dateend"] = $default["dateend"];
+    unset($_SESSION["sites"]);
+    unset($_SESSION["autoclass"]);
+    //$_SESSION["method"] = $default["method"];
 
     clear_selection($classarr, 'any'); //clear class selection
     $_SESSION["selected_any"] = "selected"; //select default value

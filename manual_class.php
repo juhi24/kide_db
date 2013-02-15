@@ -35,42 +35,27 @@ if (isset($_POST['classify'])) {
     } catch (PDOException $e) {
         pdo_error($e);
     }
-//$kysely->execute(array(':id'=>$id,
-//                       ':c1'=>$c1,
-//                       ':c2'=>$c2,
-//                       ':author'=>$author,
-//                       ':quality'=>$qstr));
+
     $insert_kysely->execute();
 
-    $sizemin = $_POST["size_min"];
-    $sizemax = $_POST["size_max"];
-    $armin = $_POST["ar_min"];
-    $armax = $_POST["ar_max"];
-    $aspratmin = $_POST["asprat_min"];
-    $aspratmax = $_POST["asprat_max"];
-    $datestart = $_POST["date_start"];
-    $dateend = $_POST["date_end"];
     $site_selection = $_POST["site"];
     $autoclass = $_POST["autoclass"];
     $method = $_POST["method"];
 
-    $_SESSION["man_sizemin"] = $sizemin;
-    $_SESSION["man_sizemax"] = $sizemax;
-    $_SESSION["man_armin"] = $armin;
-    $_SESSION["man_armax"] = $armax;
-    $_SESSION["man_aspratmin"] = $aspratmin;
-    $_SESSION["man_aspratmax"] = $aspratmax;
-    $_SESSION["man_datestart"] = $datestart;
-    $_SESSION["man_dateend"] = $dateend;
-    //$_SESSION["man_sites"] = $site_selection;
-    //$_SESSION["man_autoclass"] = $autoclass;
-    //$_SESSION["man_method"] = $method;
+    $_SESSION["sizemin"] = $_POST["size_min"];
+    $_SESSION["sizemax"] = $_POST["size_max"];
+    $_SESSION["armin"] = $_POST["ar_min"];
+    $_SESSION["armax"] = $_POST["ar_max"];
+    $_SESSION["aspratmin"] = $_POST["asprat_min"];
+    $_SESSION["aspratmax"] = $_POST["asprat_max"];
+    $_SESSION["datestart"] = $_POST["date_start"];
+    $_SESSION["dateend"] = $_POST["date_end"];
 
-//clear old values
+    //clear old values
     clear_selection($classarr, 'any');
     clear_selection($sitearr, 'other');
 
-//set new values
+    //set new values
     print_r($site_selection);
     $_SESSION["selected_$autoclass"] = "selected";
     foreach ($site_selection as $site) {
@@ -99,9 +84,9 @@ if (isset($_POST['classify'])) {
     try {
         $kysely = $yhteys->prepare($select, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $kysely->setFetchMode(PDO::FETCH_ASSOC);
-        $kysely->execute(array(':sizemin' => $sizemin, ':sizemax' => $sizemax,
-            ':datestart' => $datestart, ':dateend' => $dateend, 'armin' => $armin,
-            ':armax' => $armax, ':aspratmin' => $aspratmin, ':aspratmax' => $aspratmax));
+        $kysely->execute(array(':sizemin' => $_POST["size_min"], ':sizemax' => $_POST["size_max"],
+            ':datestart' => $_POST["date_start"], ':dateend' => $_POST["date_end"], 'armin' => $_POST["ar_min"],
+            ':armax' => $_POST["ar_max"], ':aspratmin' => $_POST["asprat_min"], ':aspratmax' => $_POST["asprat_max"]));
     } catch (PDOException $e) {
         pdo_error($e);
     }
