@@ -1,5 +1,4 @@
 <?php
-require_once 'lib/phplot.php';
 require_once 'apu.php';
 varmista_kirjautuminen();
 $yhteys = yhdista();
@@ -108,7 +107,8 @@ if (isset($_GET['results'])) {
             $plotdata[] = array('TOTAL', $stat_array[4]['total']);
             $_SESSION['statplot'] = $plotdata;
             
-            //echo '<img src="graphs/statplot.php">';
+            echo '<h3>Plots</h3>';
+            echo '<img src="graphs/statplot.php">';
         }
         ?>
         

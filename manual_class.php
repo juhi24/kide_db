@@ -52,20 +52,20 @@ if (isset($_POST['classify'])) {
     $_SESSION["dateend"] = $_POST["date_end"];
 
     //clear old values
-    clear_selection($classarr, 'any');
+    clear_selection(array_column($classarr,0), 'any');
     clear_selection($sitearr, 'other');
 
     //set new values
     print_r($site_selection);
-    $_SESSION["selected_$autoclass"] = "selected";
+    $_SESSION["selected_$autoclass"] = 'selected';
     foreach ($site_selection as $site) {
-        $_SESSION["selected_$site"] = "selected";
+        $_SESSION["selected_$site"] = 'selected';
     }
 
     $sitesql = saittifiltteri($site_selection);
     $methodsql = "";
 
-    if ($autoclass !== "any") {
+    if ($autoclass !== 'any') {
         $methodsql = "AND $method = '$autoclass'";
     }
 
@@ -98,6 +98,6 @@ if (isset($_POST['classify'])) {
     reset_defaults();
     ohjaa('manual_classification.php');
 } else {
-    die("Invalid action!");
+    die('Invalid action!');
 }
 ?>
