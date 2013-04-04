@@ -39,6 +39,16 @@ CREATE TABLE man_class (
     quality boolean
 );
 
+CREATE TABLE filter_flag (
+    id integer PRIMARY KEY,
+    name varchar(20) NOT NULL
+);
+
+CREATE TABLE class (
+    id varchar(2) PRIMARY KEY,
+    name varchar(20)
+);
+
 CREATE OR REPLACE FUNCTION round_minutes(timestamp without time zone, integer DEFAULT 1) RETURNS timestamp without time zone
     AS $$ SELECT date_trunc('hour', $1) + cast(($2::varchar||' min') AS interval) * round(date_part('minute',$1)::float / cast($2 AS float)) $$
     LANGUAGE SQL
