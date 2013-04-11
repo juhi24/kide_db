@@ -15,12 +15,16 @@ if (isset($_GET['results'])) {
         $count_user2 .= SQLparticle_count('class2', $class[0]) . " AS $class[0], ";
     }
 
-    //SELECT
+    //SELECT table data
     $select_userclass1 = "SELECT 2 AS row_order, 'user primary classification', $count_user1 COUNT(class1) AS total";
     $select_userclass2 = "SELECT 3 AS row_order, 'user secondary classification', $count_user2 COUNT(class2) AS total";
     $select_matchedclass = "SELECT 4 AS row_order, 'IC-PCA matches with user primary or secondary', $count_match COUNT(NULLIF($method=class1 OR $method=class2,FALSE)) AS total";
     $select_matchedrelat = "SELECT 5 AS row_order, 'matched %', $count_matchrelat ROUND(COUNT(NULLIF($method=class1 OR $method=class2,FALSE))/COUNT($method)::numeric*100,2) AS total";
     $select_pcaclass = "SELECT 1 AS row_order, 'IC-PCA classification', $count_pca COUNT($method) AS total";
+    
+    //SELECT sizedist
+    $count_pca_trimmed = substr_replace($count_pca, '', -2);
+    $select_sizedist = "SELECT FLOOR(dmax/50.0)*50 AS sizefloor, $count_pca_trimmed ";
 
     //FROM
     $from_dataset = "FROM (SELECT id, time, $method, dmax, ar, asprat FROM kide) AS pca
@@ -29,22 +33,37 @@ if (isset($_GET['results'])) {
     WHERE dmax BETWEEN :sizemin AND :sizemax
     AND ar BETWEEN :armin AND :armax
     AND asprat BETWEEN :aspratmin AND :aspratmax
-    AND time BETWEEN :datestart AND :dateend";
+    AND time BETWEEN :datestart AND :dateend ";
+    
+    //GROUP BY sizedist
+    $groupby_sizedist = "GROUP BY sizefloor ORDER BY sizefloor";
 
-    //prepare and execute query
+    //prep and exec table query
     try {
-        $kysely = $yhteys->prepare("SELECT * FROM ($select_pcaclass $from_dataset 
+        $table_query = $yhteys->prepare("SELECT * FROM ($select_pcaclass $from_dataset 
         UNION $select_matchedclass $from_dataset 
             UNION $select_userclass1 $from_dataset 
                 UNION $select_userclass2 $from_dataset 
                     UNION $select_matchedrelat $from_dataset) AS A ORDER BY row_order");
-        $kysely->execute(array(':sizemin' => $_POST['size_min'], ':sizemax' => $_POST['size_max'],
+        $table_query->execute(array(':sizemin' => $_POST['size_min'], ':sizemax' => $_POST['size_max'],
             ':datestart' => $default['datestart'], ':dateend' => $default['dateend'], 'armin' => $_POST['ar_min'],
             ':armax' => $_POST['ar_max'], ':aspratmin' => $_POST['asprat_min'], ':aspratmax' => $_POST['asprat_max']));
     } catch (PDOException $e) {
         pdo_error($e);
     }
-    $stat_array = $kysely->fetchAll(PDO::FETCH_ASSOC);
+    $stat_array = $table_query->fetchAll(PDO::FETCH_ASSOC);
+    
+    //prep and exec sizedist query
+    //echo $select_sizedist . $from_dataset . $groupby_sizedist;
+    try {
+        $sizedist_query = $yhteys->prepare($select_sizedist . $from_dataset . $groupby_sizedist);
+        $sizedist_query->execute(array(':sizemin' => $_POST['size_min'], ':sizemax' => $_POST['size_max'],
+            ':datestart' => $default['datestart'], ':dateend' => $default['dateend'], 'armin' => $_POST['ar_min'],
+            ':armax' => $_POST['ar_max'], ':aspratmin' => $_POST['asprat_min'], ':aspratmax' => $_POST['asprat_max']));
+    } catch (PDOException $e) {
+        pdo_error($e);
+    }
+    $sizedist_array = $sizedist_query->fetchAll(PDO::FETCH_ASSOC);
     
     //save new values to session
     $_SESSION["sizemin"] = $_POST["size_min"];
@@ -100,6 +119,7 @@ if (isset($_GET['results'])) {
             
             //print_r($stat_array);
             
+            //Prepare performance plot
             $plotdata = array();
             foreach ($classarr as $i => $class) {
                 $plotdata[] = array($class[0], $stat_array[4][strtolower($class[0])]);
@@ -107,10 +127,18 @@ if (isset($_GET['results'])) {
             $plotdata[] = array('TOTAL', $stat_array[4]['total']);
             $_SESSION['statplot'] = $plotdata;
             
+            //Prepare sizedist plot
+            //TODO: Find better way than using _SESSION
+            $_SESSION['sizedistplot'] = $sizedist_array;
+            $_SESSION['classes'] = array();
+            foreach ($classarr as $class) {
+                $_SESSION['classes'][] = $class[1];
+            }
+            
             echo '<h3>Plots</h3>';
             echo '<img src="graphs/statplot.php">';
+            echo '<img src="graphs/sizedist.php">';
         }
         ?>
-        
     </body>
 </html>
