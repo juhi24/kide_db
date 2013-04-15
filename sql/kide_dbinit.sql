@@ -5,14 +5,8 @@ CREATE TABLE users (
 );
 
 CREATE TABLE kide (
-    id varchar(50) PRIMARY KEY NOT NULL,
+    fname varchar(50) PRIMARY KEY,
     "time" timestamp without time zone NOT NULL,
-    c1nn varchar(2) REFERENCES particle_class,
-    c3nn varchar(2) REFERENCES particle_class,
-    c5nn varchar(2) REFERENCES particle_class,
-    nw3nn varchar(2) REFERENCES particle_class,
-    nw5nn varchar(2) REFERENCES particle_class,
-    bayes varchar(2) REFERENCES particle_class,
     dmax real NOT NULL,
     ar real NOT NULL,
     CHECK (ar > 0 AND ar < 1),
@@ -29,20 +23,40 @@ CREATE TABLE filter_flag (
     message varchar(20)
 );
 
+CREATE TABLE PCA_classification (
+    kide varchar(50) NOT NULL REFERENCES kide(fname) ON DELETE CASCADE,
+    pca_class varchar(2) REFERENCES classes(id),
+    pca_method varchar(5) REFERENCES PCA_method(id)
+);
+
+CREATE TABLE PCA_method (
+    id varchar(5) PRIMARY KEY,
+    fullname varchar(30) NOT NULL,
+    mtype varchar(5) NOT NULL
+);
+
+INSERT INTO PCA_method VALUES
+    ('nw1nn', 'nearest neighbour', 'nwnn'),
+    ('nw3nn', 'no weight 3 nearest neighbours', 'nwnn'),
+    ('nw5nn', 'no weight 5 nearest neighbours', 'nwnn'),
+    ('c3nn', '3 nearest neighbours', 'nn'),
+    ('c5nn', '5 nearest neighbours', 'nn'),
+    ('bayes', 'bayesian', 'bayes');
+
 CREATE TABLE man_classification (
-    kide_id varchar(50) NOT NULL REFERENCES kide ON DELETE CASCADE,
-    class1 varchar(2) NOT NULL REFERENCES particle_class,
-    class2 varchar(2) REFERENCES particle_class,
-    classified_by varchar(30) NOT NULL REFERENCES users ON DELETE CASCADE,
+    kide varchar(50) NOT NULL REFERENCES kide ON DELETE CASCADE,
+    class1 varchar(2) NOT NULL REFERENCES classes(id),
+    class2 varchar(2) REFERENCES classes(id),
+    classified_by varchar(30) NOT NULL REFERENCES users(username) ON DELETE CASCADE,
     quality boolean
 );
 
-CREATE TABLE particle_class (
+CREATE TABLE classes (
     id varchar(2) PRIMARY KEY,
-    classname varchar(20) NOT NULL
+    fullname varchar(30) NOT NULL
 );
 
-INSERT INTO particle_class VALUES
+INSERT INTO classes VALUES
     ('B','bullet'),
     ('P','plate'),
     ('C','column'),
