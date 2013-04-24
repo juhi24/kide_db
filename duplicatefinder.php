@@ -1,6 +1,6 @@
 <?php
 require_once 'apu.php';
-varmista_kirjautuminen();
+login_check();
 //$yhteys = yhdista();
 
 $showresults = true;
@@ -37,7 +37,7 @@ if (isset($_GET['results'])) {
         <title>Duplicate finder</title>
     </head>
     <body>
-        <?php require_once 'apu/header.html'; ?>
+        <?php require_once 'header.html'; ?>
         <h2>Find duplicates</h2>
         <h3>Settings</h3>
         <form method="post" action="duplicatefinder.php?results" name="findersettings">

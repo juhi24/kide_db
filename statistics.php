@@ -1,6 +1,6 @@
 <?php
 require_once 'apu.php';
-varmista_kirjautuminen();
+login_check();
 $yhteys = yhdista();
 
 $method = 'c5nn';
