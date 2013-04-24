@@ -1,6 +1,6 @@
 <?php
 require_once 'apu.php';
-varmista_kirjautuminen();
+login_check();
 
 $id = $_GET["id"]; //Luokiteltavan kiteen id.
 //Jos kidettä ei saada GETillä, valitaan se kidevalitsimella. Tyhjä id implikoi ettei haun mukaista kidettä löydy.
