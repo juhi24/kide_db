@@ -51,5 +51,8 @@ function print_simple_table($array2d) {
     echo '</table>';
 }
 
+function HTMLmessage($msg) {
+    return '<p style="background-color: greenyellow; text-align: center;">' . $msg . '</p>';
+}
 
 ?>

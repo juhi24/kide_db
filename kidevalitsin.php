@@ -1,6 +1,6 @@
 <?php
 require_once 'apu.php';
-$yhteys = yhdista();
+$yhteys = connect();
 
 $statement = "SELECT id, class1
     FROM (SELECT id FROM kide) AS ids LEFT JOIN man_class

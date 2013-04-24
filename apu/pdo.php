@@ -1,6 +1,6 @@
 <?php
-function pdo_select($selectsql) {
-    $yhteys = yhdista();
+function pdo_query($selectsql) {
+    $yhteys = connect();
     try {
         $query = $yhteys->prepare($selectsql);
         $query->execute();

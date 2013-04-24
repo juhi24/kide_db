@@ -1,6 +1,6 @@
 <?php
 
-class kyselyt {
+class Queries {
 
     private $_pdo;
 
@@ -10,7 +10,7 @@ class kyselyt {
 
     private function valmistele($sqllause) {
         try {
-        return $this->_pdo->prepare($sqllause);
+            return $this->_pdo->prepare($sqllause);
         } catch (PDOException $e) {
             file_put_contents('PDOErrors.txt', $e->getMessage(), FILE_APPEND);
             die("ERROR: " . $e->getMessage());
@@ -27,9 +27,10 @@ class kyselyt {
         }
     }
 
+
 }
 
-require_once './yhteys.php';
+require_once 'connection.php';
 
-$kyselija = new Kyselyt(yhdista());
+$kyselija = new Queries(connect());
 ?>

@@ -16,7 +16,7 @@ if (isset($_GET['results'])) {
     HAVING (COUNT($dmax)>1 AND COUNT(n_corners)>1 AND COUNT($ar)>1 AND COUNT($asprat)>1)
     ORDER BY $dmax";
 
-    $query = pdo_select($sql);
+    $query = pdo_query($sql);
 
     $duplicates = fetchAll_with_headers($query);
 
@@ -76,7 +76,7 @@ if (isset($_GET['results'])) {
                 WHERE $dmax = {$dupgroup['size']} AND $ar = {$dupgroup['arearatio']} AND $asprat = {$dupgroup['aspratio']}
                 ORDER BY time";
 
-                $duplicateids = fetchAll_with_headers(pdo_select($selectid));
+                $duplicateids = fetchAll_with_headers(pdo_query($selectid));
 
                 $isFirst = true;
                 foreach ($duplicateids as $rows => $row) {

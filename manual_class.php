@@ -1,7 +1,7 @@
 <?php
 
 require_once 'apu.php';
-$yhteys = yhdista();
+$yhteys = connect();
 
 if (isset($_POST['classify'])) {
     $id = $_POST["id"];

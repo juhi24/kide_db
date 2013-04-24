@@ -2,11 +2,12 @@
 
 session_start();
 
-require_once 'apu/kyselyt.php';
+require_once 'apu/queries.php';
 require_once 'apu/pdo.php';
 require_once 'apu/html.php';
 require_once 'apu/sql.php';
 require_once 'apu/connection.php';
+require_once 'apu/session.php';
 
 //Default values in forms
 $default = array(
@@ -29,7 +30,7 @@ function ohjaa($osoite) {
 
 //if user not logged in, redirect to login form
 function login_check() {
-    if (!on_kirjautunut()) {
+    if (!logged_in()) {
         ohjaa('login.html');
     }
 }

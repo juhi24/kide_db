@@ -27,7 +27,7 @@ function clear_selection($optionsarr, $extra_option) {
 }
 
 //check if user is logged in
-function on_kirjautunut() {
+function logged_in() {
     return isset($_SESSION['valid_user']);
 }
 

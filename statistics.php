@@ -1,7 +1,7 @@
 <?php
 require_once 'apu.php';
 login_check();
-$yhteys = yhdista();
+$yhteys = connect();
 
 $method = 'c5nn';
 

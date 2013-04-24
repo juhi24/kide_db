@@ -1,6 +1,6 @@
 <?php
 
-function yhdista() {
+function connect() {
     try {
         $yhteys = new PDO("pgsql:host=localhost;dbname=jussitii", "jussitii", "f2da6f1d197719bb");
     } catch (PDOException $e) {

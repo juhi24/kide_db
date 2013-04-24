@@ -101,13 +101,13 @@ if (!isset($id)) {
             <input type="submit" name="defaults" value="Reset to defaults"><br>
         </form><br>
 
-        <p style="background-color: greenyellow; text-align: center;">
+        
             <?php
             if (isset($_GET["success"])) {
-                echo 'Particle successfully classified!';
+                echo HTMLmessage('Particle succesfully classified');
             }
             ?>
-        </p>
+        
 
     </body>
 </html>
