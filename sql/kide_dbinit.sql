@@ -1,5 +1,5 @@
 CREATE TABLE users (
-    username varchar(30) PRIMARY KEY NOT NULL,
+    username varchar(30) PRIMARY KEY,
     password varchar(30) NOT NULL,
     email varchar(50) NOT NULL
 );
@@ -26,7 +26,8 @@ CREATE TABLE filter_flag (
 CREATE TABLE PCA_classification (
     kide varchar(50) NOT NULL REFERENCES kide(fname) ON DELETE CASCADE,
     pca_class varchar(2) REFERENCES classes(id),
-    pca_method varchar(5) REFERENCES PCA_method(id)
+    pca_method varchar(5) REFERENCES PCA_method(id),
+    PRIMARY KEY (kide,pca_method)
 );
 
 CREATE TABLE PCA_method (

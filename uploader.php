@@ -1,3 +1,7 @@
+<?php
+require_once 'apu.php';
+varmista_kirjautuminen();
+?>
 <!DOCTYPE HTML>
 <html>
     <head>

@@ -28,7 +28,7 @@ if (isset($_POST['classify'])) {
         $c2_value = "'$c2',";
     }
 
-    $insert = "INSERT INTO man_class (kide_id,class1,$c2_label classified_by,quality) VALUES ('$id','$c1',$c2_value'$author',$qstr)";
+    $insert = "INSERT INTO man_class (kide,class1,$c2_label classified_by,quality) VALUES ('$id','$c1',$c2_value'$author',$qstr)";
 
     try {
         $insert_kysely = $yhteys->prepare($insert);
@@ -71,7 +71,7 @@ if (isset($_POST['classify'])) {
 
     $select = "SELECT id, class1
     FROM (SELECT * FROM kide) AS ids LEFT JOIN man_class
-    ON ids.id=man_class.kide_id
+    ON ids.fname=man_class.kide
     WHERE class1 IS NULL
     AND dmax BETWEEN :sizemin AND :sizemax
     AND time BETWEEN :datestart AND :dateend
