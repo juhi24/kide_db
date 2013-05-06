@@ -38,17 +38,21 @@ function login_check() {
 //pick the first query result particle that has an image
 function choose_kide(PDOStatement $kysely) {
     while ($rivi = $kysely->fetch()) {
-        $id = $rivi['id'];
-        if (file_exists("img/kide/$id.jpg")) {
+        $fname = $rivi['fname'];
+        if (file_exists("img/kide/$fname.jpg")) {
             break;
         }
     }
-    return $id;
+    return $fname;
 }
 
 function array_column($array, $column) {
     foreach ($array as $row) $ret[] = $row[$column];
     return $ret;
+}
+
+function print_readable($var) {
+    echo '<pre>', print_r($var,true), '</pre>';
 }
 
 ?>

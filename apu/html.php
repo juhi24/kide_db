@@ -1,15 +1,24 @@
 <?php
+
 //HTML measurement site selector boxes
 function HTMLsite($remember_selection) {
-    global $sitearr;
+    $sitearr = getSites();
+    $siteboxes = '';
     foreach ($sitearr as $site) {
-        $siteboxes .= "$site<input name='site[]' value='$site' type='checkbox' ";
+        if ($site[0] === 'oth') {
+            continue;
+        }
+        $siteboxes .= "$site[0]<input name='site[]' value='$site[0]' type='checkbox' ";
         if ($remember_selection) {
-            $siteboxes .= $_SESSION["selected_$site"];
+            $siteboxes .= $_SESSION["selected_$site[0]"];
         }
         $siteboxes .= '>&nbsp;&nbsp;&nbsp;';
     }
-    $siteboxes .= 'Other<input name="site[]" value="other" type="checkbox"><br>';
+    $siteboxes .= "Other<input name='site[]' value='oth' type='checkbox' ";
+    if ($remember_selection) {
+        $siteboxes .= $_SESSION["selected_oth"];
+    }
+    $siteboxes .= '>';
     return $siteboxes;
 }
 
@@ -41,9 +50,9 @@ function HTMLparticleimg($id) {
 //HTML table from 2d array
 function print_simple_table($array2d) {
     echo '<table>';
-    foreach ($array2d as $rows => $row) {
+    foreach ($array2d as $row) {
         echo '<tr>';
-        foreach ($row as $col => $cell) {
+        foreach ($row as $cell) {
             echo "<td>$cell</td>";
         }
         echo '</tr>';

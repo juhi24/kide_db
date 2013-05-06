@@ -4,31 +4,27 @@ require_once 'apu.php';
 $yhteys = connect();
 
 if (isset($_POST['classify'])) {
-    $id = $_POST["id"];
-    $c1 = $_POST["class_primary"];
-    $c2 = $_POST["class_alt"];
-    $author = $_SESSION["valid_user"];
-    $quality = empty($_POST["low_quality"]);
+    $quality = empty($_POST['low_quality']);
 
-    if (!isset($c1)) {
+    if (!isset($_POST['class_primary'])) {
         die('Please choose particle habit!');
     }
 
     if ($quality) {
-        $qstr = "true";
+        $qstr = 'true';
     } else {
-        $qstr = "false";
+        $qstr = 'false';
     }
 
-    $c2_label = "";
-    $c2_value = "";
+    $c2_label = '';
+    $c2_value = '';
 
-    if (!empty($c2)) {
-        $c2_label = "class2,";
-        $c2_value = "'$c2',";
+    if (!empty($_POST['class_alt'])) {
+        $c2_label = 'class2,';
+        $c2_value = "'{$_POST['class_alt']}',";
     }
 
-    $insert = "INSERT INTO man_class (kide,class1,$c2_label classified_by,quality) VALUES ('$id','$c1',$c2_value'$author',$qstr)";
+    $insert = "INSERT INTO man_classification (kide,class1,$c2_label classified_by,quality) VALUES ('{$_POST['fname']}','{$_POST['class_primary']}',$c2_value'{$_SESSION['valid_user']}',$qstr)";
 
     try {
         $insert_kysely = $yhteys->prepare($insert);
@@ -38,18 +34,18 @@ if (isset($_POST['classify'])) {
 
     $insert_kysely->execute();
 
-    $site_selection = $_POST["site"];
-    $autoclass = $_POST["autoclass"];
-    $method = $_POST["method"];
+    $site_selection = $_POST['site'];
+    $autoclass = $_POST['autoclass'];
+    $method = $_POST['method'];
 
-    $_SESSION["sizemin"] = $_POST["size_min"];
-    $_SESSION["sizemax"] = $_POST["size_max"];
-    $_SESSION["armin"] = $_POST["ar_min"];
-    $_SESSION["armax"] = $_POST["ar_max"];
-    $_SESSION["aspratmin"] = $_POST["asprat_min"];
-    $_SESSION["aspratmax"] = $_POST["asprat_max"];
-    $_SESSION["datestart"] = $_POST["date_start"];
-    $_SESSION["dateend"] = $_POST["date_end"];
+    $_SESSION['sizemin'] = $_POST['size_min'];
+    $_SESSION['sizemax'] = $_POST['size_max'];
+    $_SESSION['armin'] = $_POST['ar_min'];
+    $_SESSION['armax'] = $_POST['ar_max'];
+    $_SESSION['aspratmin'] = $_POST['asprat_min'];
+    $_SESSION['aspratmax'] = $_POST['asprat_max'];
+    $_SESSION['datestart'] = $_POST['date_start'];
+    $_SESSION['dateend'] = $_POST['date_end'];
 
     //clear old values
     clear_selection(array_column($classarr,0), 'any');
@@ -63,15 +59,15 @@ if (isset($_POST['classify'])) {
     }
 
     $sitesql = saittifiltteri($site_selection);
-    $methodsql = "";
+    $methodsql = '';
 
     if ($autoclass !== 'any') {
         $methodsql = "AND $method = '$autoclass'";
     }
 
-    $select = "SELECT id, class1
-    FROM (SELECT * FROM kide) AS ids LEFT JOIN man_class
-    ON ids.fname=man_class.kide
+    $select = "SELECT fname, class1
+    FROM kide LEFT JOIN man_classification
+    ON kide.fname=man_classification.kide
     WHERE class1 IS NULL
     AND dmax BETWEEN :sizemin AND :sizemax
     AND time BETWEEN :datestart AND :dateend
@@ -79,21 +75,21 @@ if (isset($_POST['classify'])) {
     AND asprat BETWEEN :aspratmin AND :aspratmax
     AND site $sitesql
     $methodsql
-    AND ids.id NOT LIKE '$id'";
+    AND kide.fname NOT LIKE '{$_POST['fname']}'";
 
     try {
         $kysely = $yhteys->prepare($select, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $kysely->setFetchMode(PDO::FETCH_ASSOC);
-        $kysely->execute(array(':sizemin' => $_POST["size_min"], ':sizemax' => $_POST["size_max"],
-            ':datestart' => $_POST["date_start"], ':dateend' => $_POST["date_end"], 'armin' => $_POST["ar_min"],
-            ':armax' => $_POST["ar_max"], ':aspratmin' => $_POST["asprat_min"], ':aspratmax' => $_POST["asprat_max"]));
+        $kysely->execute(array(':sizemin' => $_POST['size_min'], ':sizemax' => $_POST['size_max'],
+            ':datestart' => $_POST['date_start'], ':dateend' => $_POST['date_end'], 'armin' => $_POST['ar_min'],
+            ':armax' => $_POST['ar_max'], ':aspratmin' => $_POST['asprat_min'], ':aspratmax' => $_POST['asprat_max']));
     } catch (PDOException $e) {
         pdo_error($e);
     }
 
-    $id_next = choose_kide($kysely);
+    $fname_next = choose_kide($kysely);
 
-    ohjaa("manual_classification.php?success&id=$id_next");
+    ohjaa("manual_classification.php?success&fname=$fname_next");
 } else if (isset($_POST['defaults'])) {
     reset_defaults();
     ohjaa('manual_classification.php');

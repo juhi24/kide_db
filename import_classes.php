@@ -24,7 +24,7 @@ $delimiter = ',';
 $allowedExt = 'csv';
 $ext = end(explode('.', $_FILES['classesfile']['name']));
 $allowedTypes = array('application/vnd.ms-excel','text/plain','text/csv','text/tsv');
-if (in_array($_FILES['classesfile']['type'],$allowedTypes) && ($ext == $allowedExt)) {
+if (in_array($_FILES['classesfile']['type'],$allowedTypes) && ($ext === $allowedExt)) {
     if ($_FILES['classesfile']['error'] > 0) {
         die('<p>Error: ' . $_FILES['classesfile']['error'] . '</p>');
     } else {
@@ -32,8 +32,8 @@ if (in_array($_FILES['classesfile']['type'],$allowedTypes) && ($ext == $allowedE
             $rows=0;
             while (($classesrow = fgetcsv($handle, 500, $delimiter)) !== FALSE) {
                 foreach ($col_index as $ival) {
-                    if (empty($classesrow[$col_index[$ival]])) {
-                        $classesrow[$col_index[$ival]] = 'NULL';
+                    if (empty($classesrow[$ival]) || ($classesrow[$ival] === 'NaN') || ($classesrow[$ival] === 'ucl')) {
+                        $classesrow[$ival] = 'NULL';
                     }
                 }
                 $insert_kide .= '(\'' . $classesrow[$col_index['fname']] . '\',\''
@@ -43,18 +43,42 @@ if (in_array($_FILES['classesfile']['type'],$allowedTypes) && ($ext == $allowedE
                         . $classesrow[$col_index['ar_filled']] . ','
                         . $classesrow[$col_index['asprat']] . ','
                         . $classesrow[$col_index['n_corners']] . ','
-                        . $classesrow[$col_index['site']] . ','
+                        . 'NULL' . ',' //site
                         . 'NULL' //filtered
                         . '),';
+                $insert_class .= class_row($classesrow[$col_index['fname']], $classesrow[$col_index['nn']], 'nw1nn');
+                $insert_class .= class_row($classesrow[$col_index['fname']], $classesrow[$col_index['nw3nn']], 'nw3nn');
+                $insert_class .= class_row($classesrow[$col_index['fname']], $classesrow[$col_index['nw5nn']], 'nw1nn');
+                $insert_class .= class_row($classesrow[$col_index['fname']], $classesrow[$col_index['3nn']], 'c3nn');
+                $insert_class .= class_row($classesrow[$col_index['fname']], $classesrow[$col_index['5nn']], 'c5nn');
+                $insert_class .= class_row($classesrow[$col_index['fname']], $classesrow[$col_index['bayes']], 'bayes');
                 $rows++;
             }
             $insert_kide = rtrim($insert_kide,',');
+            $insert_class = rtrim($insert_class,',');
+            //echo $insert_class;
+            //echo $insert_kide;
             pdo_query($insert_kide);
+            pdo_query($insert_class);
+            
             ohjaa('uploader.php?particles=' . $rows);
         }
         
     }
 } else {
     die('Invalid file');
+}
+
+function class_row($kide,$habit,$method) {
+    $habit = quotstr($habit);
+    $method = quotstr($method);
+    return '(\'' . $kide . '\',' . $habit . ',' . $method . '),';
+}
+
+function quotstr($str) {
+    if ($str !== 'NULL') {
+        return "'$str'";
+    }
+    return $str;
 }
 ?>

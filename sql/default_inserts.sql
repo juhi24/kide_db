@@ -3,7 +3,7 @@ INSERT INTO classes VALUES
     ('P','plate'),
     ('C','column'),
     ('I','irregular'),
-    ('PA','Plate agg.'),
+    ('PA','plate agg.'),
     ('CA','column agg.'),
     ('R','rosette'),
     ('RA','rosette agg.'),

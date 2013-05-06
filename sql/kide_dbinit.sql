@@ -44,7 +44,7 @@ CREATE TABLE man_classification (
     quality boolean
 );
 
-CREATE TABLE classes (
+CREATE TABLE habits (
     id varchar(2) PRIMARY KEY,
     fullname varchar(30) NOT NULL
 );

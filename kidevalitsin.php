@@ -2,9 +2,9 @@
 require_once 'apu.php';
 $yhteys = connect();
 
-$statement = "SELECT id, class1
-    FROM (SELECT id FROM kide) AS ids LEFT JOIN man_class
-    ON ids.id=man_class.kide_id
+$statement = "SELECT fname, class1
+    FROM (SELECT fname FROM kide) AS fnames LEFT JOIN man_classification
+    ON fnames.fname=man_classification.kide
     WHERE class1 IS NULL";
 
 //prepare and execute
@@ -17,5 +17,5 @@ try {
 $kysely->setFetchMode(PDO::FETCH_ASSOC);
 $kysely->execute();
 
-$id = choose_kide($kysely); //pick a particle that has an image
+$fname = choose_kide($kysely); //pick a particle that has an image
 ?>
