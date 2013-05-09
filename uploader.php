@@ -10,7 +10,7 @@ login_check();
         <title>Data uploader</title>
     </head>
     <body>
-        <?php require_once 'apu/header.html'; 
+        <?php require_once 'header.html'; 
         if (isset($_GET['particles'])) {
             $msg = $_GET['particles'] . ' particles succesfully added to database!';
             echo HTMLmessage($msg);
