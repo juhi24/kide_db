@@ -18,13 +18,13 @@ function saittifiltteri($sites) {
 }
 
 //SQL to count matched particles by class
-function SQLmatch_count($method, $class) {
-    return "COUNT(NULLIF(($method=class1 OR $method=class2) AND $method='$class',FALSE))";
+function SQLmatch_count($class) {
+    return "COUNT(NULLIF((pca_class=class1 OR pca_class=class2) AND pca_class='$class',FALSE))";
 }
 
 //SQL to count particles by class
-function SQLparticle_count($ref, $class) {
-    return "COUNT(NULLIF($ref='$class',FALSE))";
+function SQLparticle_count($column,$class) {
+    return "COUNT(NULLIF($column='$class',FALSE))";
 }
 
 

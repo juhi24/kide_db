@@ -3,6 +3,9 @@
 require_once 'apu.php';
 $yhteys = connect();
 
+$classarr = getHabits();
+$sitearr = getSites();
+
 if (isset($_POST['classify'])) {
     $quality = empty($_POST['low_quality']);
 
@@ -52,7 +55,6 @@ if (isset($_POST['classify'])) {
     clear_selection($sitearr, 'other');
 
     //set new values
-    print_r($site_selection);
     $_SESSION["selected_$autoclass"] = 'selected';
     foreach ($site_selection as $site) {
         $_SESSION["selected_$site"] = 'selected';

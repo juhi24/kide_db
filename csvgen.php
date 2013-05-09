@@ -6,6 +6,7 @@ require_once 'apu.php';
 $yhteys = connect();
 
 $pca_method = 'c5nn';
+$classarr = getHabits();
 
 //values from the form
 $reso = $_POST["resolution"];
@@ -25,12 +26,12 @@ $qualitysql = "";
 
 //if qualityfilter is checked
 if (!empty($_POST["quality"])) {
-    $qualitysql = "AND id NOT IN (SELECT kide_id FROM man_class WHERE quality IS NOT NULL OR quality=FALSE)";
+    $qualitysql = "AND fname NOT IN (SELECT kide FROM man_classification WHERE quality IS NOT NULL OR quality=FALSE)";
 }
 
 //SQL to count particles by habit
 foreach ($classarr as $class) {
-    $count .= SQLparticle_count($pca_method, $class[0]) . " AS $class[0], ";
+    $count .= SQLparticle_count('pca_class',$class[0]) . " AS $class[0], ";
 }
 
 $statement = "SELECT
@@ -39,8 +40,9 @@ $statement = "SELECT
         $count
         AVG(dmax)::real AS dmax_mean,
         (sum(ar*area(ar,dmax))/sum(area(ar,dmax)))::real AS ar_weighted_mean
-FROM kide
-WHERE dmax BETWEEN :sizemin AND :sizemax
+FROM kide LEFT JOIN PCA_classification ON (kide.fname = PCA_classification.kide)
+WHERE PCA_classification.pca_method='$pca_method'
+AND dmax BETWEEN :sizemin AND :sizemax
 AND time BETWEEN :datestart AND :dateend
 AND ar BETWEEN :armin AND :armax
 AND asprat BETWEEN :aspratmin AND :aspratmax

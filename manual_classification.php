@@ -5,10 +5,10 @@ login_check();
 //Jos kidettä ei saada GETillä, valitaan se kidevalitsimella. Tyhjä id implikoi ettei haun mukaista kidettä löydy.
 if (!isset($_GET['fname'])) {
     require_once 'kidevalitsin.php';
-} elseif ($fname == '') {
-    die('No such particle was found to be classified. Please modify your particle filter options.');
-} else {
+} elseif (empty($fname)) {
     $fname = $_GET['fname']; //Luokiteltavan kiteen fname.
+} else {
+    die('No such particle was found to be classified. Please modify your particle filter options.');
 }
 
 $classarr = getHabits();

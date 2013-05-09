@@ -4,13 +4,15 @@ login_check();
 $yhteys = connect();
 
 $method = 'c5nn';
+$sizereso = 100;
+$classarr = getHabits();
 
 if (isset($_GET['results'])) {
     //SQL for counting particles
     foreach ($classarr as $class) {
-        $count_match .= SQLmatch_count($method, $class[0]) . " AS $class[0], ";
-        $count_matchrelat .= 'ROUND(' . SQLmatch_count($method, $class[0]) . '/NULLIF(' . SQLparticle_count($method, $class[0]) . ",0)::numeric*100,2) AS $class[0], ";
-        $count_pca .= SQLparticle_count($method, $class[0]) . " AS $class[0], ";
+        $count_match .= SQLmatch_count('pca_class', $class[0]) . " AS $class[0], ";
+        $count_matchrelat .= 'ROUND(' . SQLmatch_count($method, $class[0]) . '/NULLIF(' . SQLparticle_count('pca_class', $class[0]) . ",0)::numeric*100,2) AS $class[0], ";
+        $count_pca .= SQLparticle_count('pca_class', $class[0]) . " AS $class[0], ";
         $count_user1 .= SQLparticle_count('class1', $class[0]) . " AS $class[0], ";
         $count_user2 .= SQLparticle_count('class2', $class[0]) . " AS $class[0], ";
     }
@@ -18,33 +20,31 @@ if (isset($_GET['results'])) {
     //SELECT table data
     $select_userclass1 = "SELECT 2 AS row_order, 'user primary classification', $count_user1 COUNT(class1) AS total";
     $select_userclass2 = "SELECT 3 AS row_order, 'user secondary classification', $count_user2 COUNT(class2) AS total";
-    $select_matchedclass = "SELECT 4 AS row_order, 'IC-PCA matches with user primary or secondary', $count_match COUNT(NULLIF($method=class1 OR $method=class2,FALSE)) AS total";
-    $select_matchedrelat = "SELECT 5 AS row_order, 'matched %', $count_matchrelat ROUND(COUNT(NULLIF($method=class1 OR $method=class2,FALSE))/COUNT($method)::numeric*100,2) AS total";
-    $select_pcaclass = "SELECT 1 AS row_order, 'IC-PCA classification', $count_pca COUNT($method) AS total";
+    $select_matchedclass = "SELECT 4 AS row_order, 'IC-PCA matches with user primary or secondary', $count_match COUNT(NULLIF(pca_class=class1 OR pca_class=class2,FALSE)) AS total";
+    $select_matchedrelat = "SELECT 5 AS row_order, 'matched %', $count_matchrelat ROUND(COUNT(NULLIF(pca_class=class1 OR pca_class=class2,FALSE))/NULLIF(COUNT(pca_class),0)::numeric*100,2) AS total";
+    $select_pcaclass = "SELECT 1 AS row_order, 'IC-PCA classification', $count_pca COUNT(pca_class) AS total";
     
-    //SELECT sizedist
-    $count_pca_trimmed = substr_replace($count_pca, '', -2);
-    $select_sizedist = "SELECT FLOOR(dmax/50.0)*50 AS sizefloor, $count_pca_trimmed ";
-
-    //FROM
-    $from_dataset = "FROM (SELECT id, time, $method, dmax, ar, asprat FROM kide) AS pca
-    RIGHT JOIN (SELECT kide_id, class1, class2 FROM man_class WHERE classified_by='{$_SESSION["valid_user"]}') AS usr
-    ON pca.id=usr.kide_id
-    WHERE dmax BETWEEN :sizemin AND :sizemax
+    //WHERE
+    $where = 'WHERE dmax BETWEEN :sizemin AND :sizemax
     AND ar BETWEEN :armin AND :armax
     AND asprat BETWEEN :aspratmin AND :aspratmax
-    AND time BETWEEN :datestart AND :dateend ";
+    AND time BETWEEN :datestart AND :dateend ';
+
+    //FROM
+    $from_pca_join_man = "FROM (SELECT fname, time, dmax, ar, asprat, pca_class, pca_method FROM kide LEFT JOIN pca_classification ON (kide.fname=pca_classification.kide) WHERE pca_method='$method') AS pca
+    RIGHT JOIN (SELECT kide, class1, class2 FROM man_classification WHERE classified_by='{$_SESSION['valid_user']}') AS usr
+    ON pca.fname=usr.kide $where";
     
     //GROUP BY sizedist
     $groupby_sizedist = "GROUP BY sizefloor ORDER BY sizefloor";
 
     //prep and exec table query
     try {
-        $table_query = $yhteys->prepare("SELECT * FROM ($select_pcaclass $from_dataset 
-        UNION $select_matchedclass $from_dataset 
-            UNION $select_userclass1 $from_dataset 
-                UNION $select_userclass2 $from_dataset 
-                    UNION $select_matchedrelat $from_dataset) AS A ORDER BY row_order");
+        $table_query = $yhteys->prepare("SELECT * FROM ($select_pcaclass $from_pca_join_man 
+        UNION $select_matchedclass $from_pca_join_man 
+            UNION $select_userclass1 $from_pca_join_man 
+                UNION $select_userclass2 $from_pca_join_man 
+                    UNION $select_matchedrelat $from_pca_join_man) AS A ORDER BY row_order");
         $table_query->execute(array(':sizemin' => $_POST['size_min'], ':sizemax' => $_POST['size_max'],
             ':datestart' => $default['datestart'], ':dateend' => $default['dateend'], 'armin' => $_POST['ar_min'],
             ':armax' => $_POST['ar_max'], ':aspratmin' => $_POST['asprat_min'], ':aspratmax' => $_POST['asprat_max']));
@@ -53,10 +53,17 @@ if (isset($_GET['results'])) {
     }
     $stat_array = $table_query->fetchAll(PDO::FETCH_ASSOC);
     
+    //SELECT sizedist
+    $count_pca_trimmed = substr_replace($count_pca, '', -2);
+    $select_sizedist = "SELECT FLOOR(dmax/$sizereso.0)*$sizereso AS sizefloor, $count_pca_trimmed ";
+    
+    //FROM
+    $from_pca = 'FROM kide LEFT JOIN pca_classification ON (kide.fname=pca_classification.kide) ' . $where . "AND pca_method='$method' ";
+    
     //prep and exec sizedist query
     //echo $select_sizedist . $from_dataset . $groupby_sizedist;
     try {
-        $sizedist_query = $yhteys->prepare($select_sizedist . $from_dataset . $groupby_sizedist);
+        $sizedist_query = $yhteys->prepare($select_sizedist . $from_pca . $groupby_sizedist);
         $sizedist_query->execute(array(':sizemin' => $_POST['size_min'], ':sizemax' => $_POST['size_max'],
             ':datestart' => $default['datestart'], ':dateend' => $default['dateend'], 'armin' => $_POST['ar_min'],
             ':armax' => $_POST['ar_max'], ':aspratmin' => $_POST['asprat_min'], ':aspratmax' => $_POST['asprat_max']));
@@ -66,12 +73,12 @@ if (isset($_GET['results'])) {
     $sizedist_array = $sizedist_query->fetchAll(PDO::FETCH_ASSOC);
     
     //save new values to session
-    $_SESSION["sizemin"] = $_POST["size_min"];
-    $_SESSION["sizemax"] = $_POST["size_max"];
-    $_SESSION["armin"] = $_POST["ar_min"];
-    $_SESSION["armax"] = $_POST["ar_max"];
-    $_SESSION["aspratmin"] = $_POST["asprat_min"];
-    $_SESSION["aspratmax"] = $_POST["asprat_max"];
+    $_SESSION['sizemin'] = $_POST['size_min'];
+    $_SESSION['sizemax'] = $_POST['size_max'];
+    $_SESSION['armin'] = $_POST['ar_min'];
+    $_SESSION['armax'] = $_POST['ar_max'];
+    $_SESSION['aspratmin'] = $_POST['asprat_min'];
+    $_SESSION['aspratmax'] = $_POST['asprat_max'];
 }
 ?>
 
@@ -85,7 +92,7 @@ if (isset($_GET['results'])) {
         <title>Statistics</title>
     </head>
     <body>
-        <?php require_once 'apu/header.html'; ?>
+        <?php require_once 'header.html'; ?>
         <h2>Statistics</h2>
         <h3>Stat filters</h3>
         <form name="getstats" method="post" action="statistics.php?results">
@@ -116,8 +123,6 @@ if (isset($_GET['results'])) {
                 echo '</tr>';
             }
             echo '</table>';
-            
-            //print_r($stat_array);
             
             //Prepare performance plot
             $plotdata = array();

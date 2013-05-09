@@ -10,14 +10,6 @@ function pdo_query($selectsql) {
     return $query;
 }
 
-function fetchAll($query) {
-    $arr = array();
-    while ($row = $query->fetch()) {
-        $arr[] = $row;
-    }
-    return $arr;
-}
-
 function fetchAll_with_headers($query) {
     $arr = array();
     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -35,11 +27,16 @@ function pdo_error(PDOException $e) {
     die('ERROR: ' . $e->getMessage());
 }
 
+function getAll($table) {
+    $q = pdo_query("SELECT * FROM $table ORDER BY id");
+    return $q->fetchAll(PDO::FETCH_NUM);
+}
+
 function getHabits() {
-    return fetchAll(pdo_query('SELECT * FROM habits ORDER BY id'));
+    return getAll('habits');
 }
 
 function getSites() {
-    return fetchAll(pdo_query('SELECT * FROM ARM_site ORDER BY id'));
+    return getAll('ARM_site');
 }
 ?>

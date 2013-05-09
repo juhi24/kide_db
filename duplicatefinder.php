@@ -72,7 +72,7 @@ if (isset($_GET['results'])) {
             print_simple_table($duplicates);
             echo '<h3>Possible duplicates</h3>';
             foreach (array_slice($duplicates, 1) as $dupgroups => $dupgroup) {
-                $selectid = "SELECT time, id FROM kide 
+                $selectid = "SELECT time, fname FROM kide 
                 WHERE $dmax = {$dupgroup['size']} AND $ar = {$dupgroup['arearatio']} AND $asprat = {$dupgroup['aspratio']}
                 ORDER BY time";
 
