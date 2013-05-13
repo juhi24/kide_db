@@ -3,8 +3,10 @@ require_once 'apu.php';
 login_check();
 $yhteys = connect();
 
+//config
 $method = 'c5nn';
-$sizereso = 100;
+$sizereso = 50;
+
 $classarr = getHabits();
 
 if (isset($_GET['results'])) {
@@ -53,12 +55,19 @@ if (isset($_GET['results'])) {
     }
     $stat_array = $table_query->fetchAll(PDO::FETCH_ASSOC);
     
+    //Extra options
+    $left_join_man = 'LEFT JOIN man_classification ON (kide.fname=man_classification.kide) ';
+    $and_jun = "AND classified_by='Jun' AND class1='U' ";
+    
     //SELECT sizedist
     $count_pca_trimmed = substr_replace($count_pca, '', -2);
     $select_sizedist = "SELECT FLOOR(dmax/$sizereso.0)*$sizereso AS sizefloor, $count_pca_trimmed ";
     
     //FROM
-    $from_pca = 'FROM kide LEFT JOIN pca_classification ON (kide.fname=pca_classification.kide) ' . $where . "AND pca_method='$method' ";
+    $from_pca = 'FROM kide LEFT JOIN pca_classification ON (kide.fname=pca_classification.kide) ';
+    $from_pca .= $left_join_man; //extra
+    $from_pca .= $where . "AND pca_method='$method' ";
+    $from_pca .= $and_jun; //extra
     
     //prep and exec sizedist query
     //echo $select_sizedist . $from_dataset . $groupby_sizedist;

@@ -14,8 +14,7 @@ CREATE TABLE kide (
     CHECK (ar_noholes > 0 AND ar_noholes < 1),
     asprat real NOT NULL,
     n_corners integer,
-    site varchar(3) REFERENCES ARM_site,
-    filtered integer REFERENCES filter_flag
+    site varchar(3) REFERENCES ARM_site
 );
 
 CREATE TABLE filter_flag (
@@ -24,8 +23,8 @@ CREATE TABLE filter_flag (
 );
 
 CREATE TABLE PCA_classification (
-    kide varchar(50) NOT NULL REFERENCES kide(fname) ON DELETE CASCADE,
-    pca_class varchar(2) REFERENCES classes(id),
+    kide varchar(50) REFERENCES kide(fname) ON DELETE CASCADE,
+    pca_class varchar(2) REFERENCES habits(id),
     pca_method varchar(5) REFERENCES PCA_method(id),
     PRIMARY KEY (kide,pca_method)
 );
@@ -36,12 +35,19 @@ CREATE TABLE PCA_method (
     mtype varchar(5) NOT NULL
 );
 
+CREATE TABLE flags (
+    kide varchar(50) REFERENCES kide(fname) ON DELETE CASCADE,
+    flag varchar(10),
+    PRIMARY KEY (kide,flag)
+);
+
 CREATE TABLE man_classification (
-    kide varchar(50) NOT NULL REFERENCES kide ON DELETE CASCADE,
-    class1 varchar(2) NOT NULL REFERENCES classes(id),
-    class2 varchar(2) REFERENCES classes(id),
-    classified_by varchar(30) NOT NULL REFERENCES users(username) ON DELETE CASCADE,
-    quality boolean
+    kide varchar(50) REFERENCES kide ON DELETE CASCADE,
+    class1 varchar(2) NOT NULL REFERENCES habits(id),
+    class2 varchar(2) REFERENCES habits(id),
+    classified_by varchar(30) REFERENCES users(username) ON DELETE CASCADE,
+    quality boolean,
+    PRIMARY KEY (kide,classified_by)
 );
 
 CREATE TABLE habits (
