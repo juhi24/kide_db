@@ -150,8 +150,8 @@ if (isset($_GET['results'])) {
             }
             
             echo '<h3>Plots</h3>';
-            echo '<img src="graphs/statplot.php">';
-            echo '<img src="graphs/sizedist.php">';
+            echo HTMLplot('statplot');
+            echo HTMLplot('sizedist');
         }
         ?>
     </body>

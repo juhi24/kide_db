@@ -77,16 +77,8 @@ if (isset($_GET['results'])) {
                 ORDER BY time";
 
                 $duplicateids = fetchAll_with_headers(pdo_query($selectid));
-
-                $isFirst = true;
-                foreach ($duplicateids as $rows => $row) {
-                    if ($isFirst) {
-                        $isFirst = false;
-                        $duplicateids[$rows][] = "image";
-                        continue;
-                    }
-                    $duplicateids[$rows][] = HTMLparticleimg($row['id']);
-                }
+                $duplicateids = imagecol($duplicateids,'image','',''); //add column for images
+                
                 print_simple_table($duplicateids);
             }
         } elseif (!$showresults) {

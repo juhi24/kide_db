@@ -37,6 +37,7 @@ function login_check() {
 
 //pick the first query result particle that has an image
 function choose_kide(PDOStatement $kysely) {
+    $fname = '';
     while ($rivi = $kysely->fetch()) {
         $fname = $rivi['fname'];
         if (file_exists("img/kide/$fname.jpg")) {
@@ -46,13 +47,45 @@ function choose_kide(PDOStatement $kysely) {
     return $fname;
 }
 
+function any_kide() {
+    $yhteys = connect();
+
+    $statement = "SELECT fname FROM kide WHERE fname NOT IN 
+        (SELECT kide FROM man_classification WHERE classified_by = '{$_SESSION['valid_user']}')";
+
+    //prepare and execute
+    try {
+        $kysely = $yhteys->prepare($statement);
+    } catch (PDOException $e) {
+        pdo_error($e);
+    }
+    $kysely->setFetchMode(PDO::FETCH_ASSOC);
+    $kysely->execute();
+
+    return choose_kide($kysely); //pick the first particle that has an image
+}
+
 function array_column($array, $column) {
-    foreach ($array as $row) $ret[] = $row[$column];
+    foreach ($array as $row)
+        $ret[] = $row[$column];
     return $ret;
 }
 
+function imagecol($arr,$colname,$prefix,$postfix) {
+    $isFirst = true;
+    foreach ($arr as $rows => $row) {
+        if ($isFirst) {
+            $isFirst = false;
+            $arr[$rows][] = $colname;
+            continue;
+        }
+        $arr[$rows][] = HTMLparticleimg($prefix . $row['fname'] . $postfix);
+    }
+    return $arr;
+}
+
 function print_readable($var) {
-    echo '<pre>', print_r($var,true), '</pre>';
+    echo '<pre>', print_r($var, true), '</pre>';
 }
 
 ?>

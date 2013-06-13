@@ -4,7 +4,7 @@ login_check();
 
 //Jos kidettä ei saada GETillä, valitaan se kidevalitsimella. Tyhjä id implikoi ettei haun mukaista kidettä löydy.
 if (!isset($_GET['fname'])) {
-    require_once 'kidevalitsin.php';
+    $fname = any_kide();
 } elseif (empty($fname)) {
     $fname = $_GET['fname']; //Luokiteltavan kiteen fname.
 } else {

@@ -29,13 +29,7 @@ if (isset($_POST['classify'])) {
 
     $insert = "INSERT INTO man_classification (kide,class1,$c2_label classified_by,quality) VALUES ('{$_POST['fname']}','{$_POST['class_primary']}',$c2_value'{$_SESSION['valid_user']}',$qstr)";
 
-    try {
-        $insert_kysely = $yhteys->prepare($insert);
-    } catch (PDOException $e) {
-        pdo_error($e);
-    }
-
-    $insert_kysely->execute();
+    pdo_query($insert);
 
     $site_selection = $_POST['site'];
     $autoclass = $_POST['autoclass'];

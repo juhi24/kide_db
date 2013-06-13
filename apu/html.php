@@ -43,25 +43,35 @@ function HTMLasprat($min, $max) {
 }
 
 //HTML for particle image
-function HTMLparticleimg($id) {
-    return "<img alt='$id' src='img/kide/$id.jpg'>";
+function HTMLparticleimg($fname) {
+    return "<img alt='$fname' src='img/kide/$fname.jpg'>";
 }
 
 //HTML table from 2d array
 function print_simple_table($array2d) {
     echo '<table>';
+    $isfirst = true;
     foreach ($array2d as $row) {
-        echo '<tr>';
-        foreach ($row as $cell) {
-            echo "<td>$cell</td>";
+        $celltag = 'td';
+        if ($isfirst) {
+            $isfirst = false;
+            $celltag = 'th';
         }
-        echo '</tr>';
+        echo "<tr>";
+        foreach ($row as $cell) {
+            echo "<$celltag>$cell</$celltag>";
+        }
+        echo "</tr>";
     }
     echo '</table>';
 }
 
 function HTMLmessage($msg) {
     return '<p style="background-color: greenyellow; text-align: center;">' . $msg . '</p>';
+}
+
+function HTMLplot($plotname) {
+    return "<img src='graphs/$plotname.php'>";
 }
 
 ?>
