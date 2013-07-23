@@ -20,7 +20,7 @@ $plot->SetYLabel('particle count');
 $plot->SetLegend($_SESSION['classes']);
 
 $plot->SetPlotAreaWorld(NULL, 0, NULL, NULL);
-$plot->SetYTickIncrement(10);
+$plot->SetYScaleType('linear');
 
 $plot->DrawGraph();
 ?>

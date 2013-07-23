@@ -65,9 +65,9 @@ if (isset($_GET['results'])) {
     
     //FROM
     $from_pca = 'FROM kide LEFT JOIN pca_classification ON (kide.fname=pca_classification.kide) ';
-    $from_pca .= $left_join_man; //extra
+    //$from_pca .= $left_join_man; //extra
     $from_pca .= $where . "AND pca_method='$method' ";
-    $from_pca .= $and_jun; //extra
+    //$from_pca .= $and_jun; //extra
     
     //prep and exec sizedist query
     //echo $select_sizedist . $from_dataset . $groupby_sizedist;

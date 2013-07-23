@@ -9,9 +9,9 @@ CREATE TABLE kide (
     "time" timestamp without time zone NOT NULL,
     dmax real NOT NULL,
     ar real NOT NULL,
-    CHECK (ar > 0 AND ar < 1),
+    CHECK (ar > 0 AND ar < 1.1),
     ar_noholes real NOT NULL,
-    CHECK (ar_noholes > 0 AND ar_noholes < 1),
+    CHECK (ar_noholes > 0 AND ar_noholes < 1.1),
     asprat real NOT NULL,
     n_corners integer,
     site varchar(3) REFERENCES ARM_site
@@ -37,7 +37,7 @@ CREATE TABLE PCA_method (
 
 CREATE TABLE flags (
     kide varchar(50) REFERENCES kide(fname) ON DELETE CASCADE,
-    flag varchar(10),
+    flag varchar(15),
     PRIMARY KEY (kide,flag)
 );
 

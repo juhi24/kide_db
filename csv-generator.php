@@ -12,8 +12,8 @@ login_check();
 
         <?php require_once 'header.html'; ?>
 
-        <h2>CSV-generator</h2>
-        <br>
+        <h2>CSV-summary generator</h2>
+        <p>Generate particle distribution summaries in an easy-to-use format.</p>
         <form method="post" action="csvgen.php" name="csv-generator"><br>
             <fieldset><legend>Select dataset</legend>
                 <p>Site(s):&nbsp;&nbsp;&nbsp; 
@@ -44,8 +44,12 @@ login_check();
                 <option>seconds</option>
                 <option selected="selected">minutes</option>
             </select></p>
-            <p><input checked="checked" name="quality" type="checkbox"> Filter data marked as low quality</p>
-            <p><input name="Submit" type="submit"> <input name="Reset" type="reset"></p>
+            <p><input checked="checked" name="quality" type="checkbox"> Exclude particles manually marked as low quality</p>
+            <p><input type="checkbox" name="filters" checked="checked"> Exclude automatically filtered particles</p>
+            <p><input type="submit" name="single-bin" value="Generate output"> <input type="reset" name="reset"></p>
+            <h3>Size bins</h3>
+            <textarea name="sizebins" placeholder="Paste size bins here"></textarea>
+            <p><input type="submit" name="multibin" value="Generate output archive"></p>
         </form>
 
     </body>

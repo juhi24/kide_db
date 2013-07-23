@@ -2,81 +2,123 @@
 
 require_once 'apu.php';
 
-//connection
-$yhteys = connect();
+$downloadsdir = 'downloads';
+$bins_dir = $downloadsdir . DIRECTORY_SEPARATOR . 'sizebins';
 
-$pca_method = 'c5nn';
-$classarr = getHabits();
+if (isset($_POST['single-bin'])) {
+    $kysely = flux_query($_POST['size_min'],$_POST['size_max']);
+    
+    //save query results to a csv-file
+    $csvfilename = 'output.csv';
+    $csvfilepath = $downloadsdir . DIRECTORY_SEPARATOR . $csvfilename;
+    results2csv($kysely, $csvfilepath);
+    
+    // Start csv download
+    header('Content-type: text/plain');
+    header("Content-Disposition: attachment; filename='$csvfilepath'");
+    readfile($csvfilepath);
+} elseif (isset($_POST['multibin'])) {
+    $sizebins = preg_split('/\r\n|\ŗ|\n/', $_POST['sizebins']);
+    foreach ($sizebins as $irow => $binrow) {
+        $sizebins[$irow] = preg_split('/[\s,]+/', trim($binrow));
+    }
+    $col_count = max(array_map('count', $sizebins));
+    if ($col_count != 3) {
+        die('ERROR: Unsupported size bins format. There seems to be ' . $col_count. ' columns.');
+    }
+    foreach ($sizebins as $binrow) {
+        $q = flux_query($binrow[0], $binrow[2]);
+        $csvfilename = str_replace('.', '_', $binrow[1]) . '.csv';
+        $csvfilepath = $bins_dir . DIRECTORY_SEPARATOR . $csvfilename;
+        results2csv($q, $csvfilepath);
+    }
 
-//values from the form
-$reso = $_POST["resolution"];
-$tunit = $_POST["timeunit"];
-$sizemin = $_POST["size_min"];
-$sizemax = $_POST["size_max"];
-$armin = $_POST["ar_min"];
-$armax = $_POST["ar_max"];
-$aspratmin = $_POST["asprat_min"];
-$aspratmax = $_POST["asprat_max"];
-$datestart = $_POST["date_start"];
-$dateend = $_POST["date_end"];
-$site_selection = $_POST["site"];
-
-$sitesql = saittifiltteri($site_selection);
-$qualitysql = "";
-
-//if qualityfilter is checked
-if (!empty($_POST["quality"])) {
-    $qualitysql = "AND fname NOT IN (SELECT kide FROM man_classification WHERE quality IS NOT NULL OR quality=FALSE)";
+    // ZIP magic
+    $zipname = 'output_bins.zip';
+    $zip_path = $downloadsdir . DIRECTORY_SEPARATOR . $zipname;
+    $bins_zip = new ZipArchive();
+    if ($bins_zip->open($zip_path, ZipArchive::CREATE) === TRUE) {
+        $csvfiles = glob($bins_dir . DIRECTORY_SEPARATOR . '*');
+        foreach ($csvfiles as $csvfile) {
+            $bins_zip->addFile($csvfile, basename($csvfile));
+        }
+        $bins_zip->close();
+        foreach ($csvfiles as $csvfile) {
+            if (is_file($csvfile)) {
+                unlink($csvfile);
+            }
+        }
+    } else {
+        die('ERROR: Could not create zip-archive.');
+    }
+    
+    header('Content-type: application/octet-stream');
+    header('Content-disposition: attachment; filename=' . $zipname);
+    readfile($zip_path);
 }
 
-//SQL to count particles by habit
-foreach ($classarr as $class) {
-    $count .= SQLparticle_count('pca_class',$class[0]) . " AS $class[0], ";
+function results2csv($q, $csvfilepath) {
+    $hfile = fopen($csvfilepath, 'w');
+    $otsikot = array();
+    while ($rivi = $q->fetch()) {
+        if (empty($otsikot)) {
+            $otsikot = array_keys($rivi);
+            fputcsv($hfile, $otsikot);
+        }
+        fputcsv($hfile, $rivi);
+    }
+    fclose($hfile);
 }
 
-$statement = "SELECT
-        round_$tunit(time, :reso ) AS interval,
-        COUNT(*) AS tot,
+function flux_query($sizemin,$sizemax) {
+    //connection
+    $yhteys = connect();
+
+    $pca_method = 'c5nn';
+    $classarr = getHabits();
+
+    $sitesql = saittifiltteri($_POST['site']);
+    $qualitysql = "";
+
+    //if qualityfilter is checked
+    if (!empty($_POST['quality'])) {
+        $qualitysql = 'AND fname NOT IN (SELECT kide FROM man_classification WHERE quality IS NOT NULL OR quality=FALSE)';
+    }
+
+    //SQL to count particles by habit
+    $count = '';
+    foreach ($classarr as $class) {
+        $count .= SQLparticle_count('pca_class', $class[0]) . " AS $class[0], ";
+    }
+
+    $statement = "SELECT
+        round_{$_POST['timeunit']}(time, :reso ) AS interval,
+        COUNT(fname) AS tot,
         $count
         AVG(dmax)::real AS dmax_mean,
         (sum(ar*area(ar,dmax))/sum(area(ar,dmax)))::real AS ar_weighted_mean
-FROM kide LEFT JOIN PCA_classification ON (kide.fname = PCA_classification.kide)
-WHERE PCA_classification.pca_method='$pca_method'
-AND dmax BETWEEN :sizemin AND :sizemax
-AND time BETWEEN :datestart AND :dateend
-AND ar BETWEEN :armin AND :armax
-AND asprat BETWEEN :aspratmin AND :aspratmax
-AND site $sitesql
-$qualitysql
-GROUP BY interval
-ORDER BY interval";
+    FROM kide LEFT JOIN PCA_classification ON (kide.fname = PCA_classification.kide)
+    WHERE PCA_classification.pca_method='$pca_method'
+    AND dmax BETWEEN :sizemin AND :sizemax
+    AND time BETWEEN :datestart AND :dateend
+    AND ar BETWEEN :armin AND :armax
+    AND asprat BETWEEN :aspratmin AND :aspratmax
+    AND site $sitesql
+    $qualitysql
+    GROUP BY interval
+    ORDER BY interval";
 
-//prepare and execute query
-try {
-    $kysely = $yhteys->prepare($statement, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-    $kysely->setFetchMode(PDO::FETCH_ASSOC);
-    $kysely->execute(array(':reso' => $reso, ':sizemin' => $sizemin, ':sizemax' => $sizemax,
-        ':datestart' => $datestart, ':dateend' => $dateend, 'armin' => $armin,
-        ':armax' => $armax, ':aspratmin' => $aspratmin, ':aspratmax' => $aspratmax));
-} catch (PDOException $e) {
-    pdo_error($e);
-}
-
-//save query results to a csv-file
-$file = fopen("output.csv", "w");
-$otsikot = array();
-while ($rivi = $kysely->fetch()) {
-    if (empty($otsikot)) {
-        $otsikot = array_keys($rivi);
-        fputcsv($file, $otsikot);
+    //prepare and execute query
+    try {
+        $kysely = $yhteys->prepare($statement, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $kysely->setFetchMode(PDO::FETCH_ASSOC);
+        $kysely->execute(array(':reso' => $_POST['resolution'], ':sizemin' => $sizemin, ':sizemax' => $sizemax,
+            ':datestart' => $_POST['date_start'], ':dateend' => $_POST['date_end'], 'armin' => $_POST['ar_min'],
+            ':armax' => $_POST['ar_max'], ':aspratmin' => $_POST['asprat_min'], ':aspratmax' => $_POST['asprat_max']));
+    } catch (PDOException $e) {
+        pdo_error($e);
     }
-    //var_dump($rivi);
-    fputcsv($file, $rivi);
+    return $kysely;
 }
-fclose($file);
 
-// Start csv download
-header('Content-type: text/plain');
-header('Content-Disposition: attachment; filename="output.csv"');
-readfile('output.csv')
 ?>
