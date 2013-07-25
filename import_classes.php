@@ -6,6 +6,7 @@ $insert_kide = 'INSERT INTO kide VALUES ';
 $insert_class = 'INSERT INTO PCA_classification VALUES ';
 $insert_flags = 'INSERT INTO flags VALUES ';
 
+//CONFIG
 $col_index = array(
     'fname' => 1,
     'nn' => 2,
@@ -36,7 +37,7 @@ if (in_array($_FILES['classesfile']['type'], $allowedTypes) && ($ext === $allowe
             while (($classesrow = fgetcsv($handle, 500, $delimiter)) !== FALSE) {
                 foreach ($col_index as $ival) {
                     if (empty($classesrow[$ival]) || ($classesrow[$ival] === 'NaN') || ($classesrow[$ival] === 'ucl')) {
-                        $classesrow[$ival] = 'NULL';
+                        $classesrow[$ival] = '';
                     }
                 }
                 $insert_kide .= '(\'' . $classesrow[$col_index['fname']] . '\',\''
@@ -46,7 +47,7 @@ if (in_array($_FILES['classesfile']['type'], $allowedTypes) && ($ext === $allowe
                         . $classesrow[$col_index['ar_filled']] . ','
                         . $classesrow[$col_index['asprat']] . ','
                         . $classesrow[$col_index['n_corners']] . ','
-                        . 'NULL' //site
+                        . 'DEFAULT' //site
                         . '),';
 
                 $insert_class .= class_row($classesrow[$col_index['fname']], $classesrow[$col_index['nn']], 'nw1nn');
@@ -88,10 +89,11 @@ function class_row($kide, $habit, $method) {
 }
 
 function quotstr($str) {
-    if ($str !== 'NULL') {
+    if (empty($str)) {
+        return 'DEFAULT';
+    } else {
         return "'$str'";
     }
-    return $str;
 }
 
 ?>

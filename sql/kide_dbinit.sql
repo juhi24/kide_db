@@ -17,9 +17,16 @@ CREATE TABLE kide (
     site varchar(3) REFERENCES ARM_site
 );
 
-CREATE TABLE filter_flag (
+CREATE TABLE project (
     id SERIAL PRIMARY KEY,
-    message varchar(20)
+    shortname varchar(10),
+    description varchar(240)
+);
+
+CREATE TABLE kide_project (
+    kide varchar(50) REFERENCES kide ON DELETE CASCADE,
+    project INTEGER REFERENCES project ON DELETE CASCADE,
+    PRIMARY KEY (kide,project)
 );
 
 CREATE TABLE PCA_classification (

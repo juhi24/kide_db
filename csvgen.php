@@ -78,11 +78,15 @@ function flux_query($sizemin,$sizemax) {
     $classarr = getHabits();
 
     $sitesql = saittifiltteri($_POST['site']);
-    $qualitysql = "";
+    $qualitysql = '';
+    $filtersql = '';
 
     //if qualityfilter is checked
     if (!empty($_POST['quality'])) {
         $qualitysql = 'AND fname NOT IN (SELECT kide FROM man_classification WHERE quality IS NOT NULL OR quality=FALSE)';
+    }
+    if (!empty($_POST['filters'])) {
+        $filtersql = 'AND fname NOT IN (SELECT kide FROM flags WHERE flag IS NOT NULL)';
     }
 
     //SQL to count particles by habit
@@ -105,6 +109,7 @@ function flux_query($sizemin,$sizemax) {
     AND asprat BETWEEN :aspratmin AND :aspratmax
     AND site $sitesql
     $qualitysql
+    $filtersql
     GROUP BY interval
     ORDER BY interval";
 
